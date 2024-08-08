@@ -1,0 +1,180 @@
+{% extends 'base.html' %}
+
+{% block head_title %}
+{{permissions.permissionsCollege}}
+{% endblock %}
+
+{% load static %}
+
+{% block style %}
+
+<style>
+    .mbt-ol {
+        width: 300px;
+        margin: 10px;
+        counter-reset: my-counter;
+        padding-right: 0;
+    }
+
+    .mbt-ol li {
+
+        border-bottom: 1px dotted #ccc;
+        padding: 5px;
+        counter-increment: my-counter;
+        list-style: none;
+        margin-right: 15px
+    }
+
+    .ut {
+        margin-right: 10px;
+    }
+
+    .mbt-ol li:before {
+        content: counter(my-counter) ". ";
+        font-weight: bold;
+    }
+
+    .sect {
+        margin: 50px;
+        height: 100vh;
+        padding: 50px 40px;
+    }
+</style>
+
+<link rel="stylesheet" href="{% static 'css/multi-select.min.css' %}">
+{% endblock %}
+
+
+{% block content %}
+
+<div class="sec sect">
+
+    <div class="row">
+        <div class="col-6">
+            <h1 class="mb-4">القسم: {{ permissions.permissionsCollege }}</h1>
+        </div>
+        <div class="col-6 d-flex justify-content-end">
+            <div>
+
+                <button class="btn btn btn-outline-success" data-bs-toggle="modal"
+                    data-bs-target="#exampleModal">تعديل</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">تعديل القسم</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="{% url 'app:permissions_update' permissions.id %}" id="form" method="POST">
+                        {% csrf_token %}
+                        <div class="form-floating">
+                            <input type="text" class="form-control" value="{{ permissions.permissionsCollege }}"
+                                name="permissionsCollege" placeholder="asdf" id="t">
+                            <label for="t">القسم</label>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">إغلاق</button>
+                    <button type="submit" form="form" class="btn btn-outline-success">تعديل</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <p class="fs-5 mb-3 ut">موظفوا القسم</p>
+    <ol class="mbt-ol mb-4">
+        {% for user in users %}
+        {% if not user.is_superuser %}
+        <li>{{ user.username }}</li>
+        {% endif %}
+        {% endfor %}
+    </ol>
+
+    <h3 class="mb-4 fs-3">اختر الموظفين:</h3>
+    <div class="row">
+        <div class="col-6">
+
+            <form method="post">
+                {% csrf_token %}
+                <div class=" mb-3 autocomplete">
+                    <select id="floatingP" name="userId" placeholder="nothing" class="form-select" multiple />
+
+                    <label for="floatingP">القسم </label>
+                    </select>
+                </div>
+
+                <br>
+                <button type="submit" class="btn btn-outline-primary">حفظ</button>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="{% static 'js/multi-select.js'%}"></script>
+
+<script>
+    $(document).ready(function () {
+        let op
+        let select = document.getElementById("floatingP");
+        "{% for user in all_users %}"
+        "{% if not user.is_superuser %}"
+        op = document.createElement("option")
+        op.value = "{{user.pk}}"
+        op.text = "{{user}}"
+        "{% if user in users %}"
+        op.selected = true
+        "{% endif %}"
+        select.add(op)
+        "{% endif %}"
+        "{% endfor %}"
+
+
+
+
+
+
+
+        new MultiSelectTag('floatingP')
+
+    });
+</script>
+{% endblock %}
+
+
+
+{% block styles %}
+<style>
+    h1 {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+    }
+
+    p {
+        font-size: 1.2rem;
+        margin-bottom: 0.5rem;
+    }
+
+    select {
+        font-size: 1.2rem;
+        padding: 0.5rem;
+        margin-bottom: 1rem;
+    }
+
+    button {
+        font-size: 1.2rem;
+        padding: 0.5rem 1rem;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 0.25rem;
+        cursor: pointer;
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,328 @@
+{% extends "base.html" %} {% block head_title %}الصفحة الرئيسية{% endblock %}
+<!-- something not usefull -->
+{% load static %} {% block style %}
+<link rel="stylesheet" href="{% static 'css/home.css'%}" />
+<link rel="stylesheet" href="{% static 'css/skydash/css/vertical-layout-light/style.css'%}" />
+<style type="text/css">
+  /* Chart.js */
+  @keyframes chartjs-render-animation {
+    from {
+      opacity: .99
+    }
+
+    to {
+      opacity: 1
+    }
+  }
+
+  .chartjs-render-monitor {
+    animation: chartjs-render-animation 1ms
+  }
+
+  .chartjs-size-monitor,
+  .chartjs-size-monitor-expand,
+  .chartjs-size-monitor-shrink {
+    position: absolute;
+    direction: ltr;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
+    pointer-events: none;
+    visibility: hidden;
+    z-index: -1
+  }
+
+  .chartjs-size-monitor-expand>div {
+    position: absolute;
+    width: 1000000px;
+    height: 1000000px;
+    left: 0;
+    top: 0
+  }
+
+  .chartjs-size-monitor-shrink>div {
+    position: absolute;
+    width: 200%;
+    height: 200%;
+    left: 0;
+    top: 0
+  }
+  @media screen and (max-width: 1000px){
+    .weather-info h4, .weather-info h6, .weather-info .font-weight-normal{
+      font-size: 16px !important;
+    }
+  }
+</style>
+<script src="{% static 'js/chart.js' %}">
+
+</script>
+{% endblock %}
+{%block content %}
+
+<h2 class="tit">الصفحة الرئيسية</h2>
+
+
+<div class="row align-items-center">
+  <div class="col-md-6 grid-margin stretch-card d-none d-lg-block">
+    <div class="card tale-bg">
+      <div class="card-people mt-auto">
+        <img src="{% static 'images/people.svg' %}" alt="people">
+        <div class="weather-info">
+          <div class="d-flex">
+            <div class="ml-2">
+              <h4 class="location font-weight-normal">سوريا</h4>
+              <h6 class="font-weight-normal">حمص</h6>
+            </div>
+            <div>
+              <h2 class="mb-0 font-weight-normal"><i class="fa-solid fa-calender  mr-2"></i><span id="dd"></span></h2>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class=" col-12 col-lg-6 grid-margin transparent">
+    <div class="row">
+      <div class="col-md-6 mb-4 stretch-card transparent">
+        <div class="card card-dark-blue">
+          <div class="card-body">
+            <p class="mb-4">العدد الكلي</p>
+            <p class="fs-30 mb-2">{{statistics.allDemons}}</p>
+
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 mb-4 stretch-card transparent">
+        <div class="card card-tale">
+          <div class="card-body">
+            <p class="mb-4">عدد المعيدين</p>
+            <p class="fs-30 mb-2">{{statistics.allInDispatch}}</p>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="row">
+      <div class="col-md-6 stretch-card transparent">
+        <div class="card card-light-danger">
+          <div class="card-body">
+            <p class="mb-4">الماجستير</p>
+            <p class="fs-30 mb-2">{{statistics.master}}</p>
+
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 mb-4 mb-lg-0 stretch-card transparent">
+        <div class="card card-light-blue">
+          <div class="card-body">
+            <p class="mb-4">الدكتوراه</p>
+            <p class="fs-30 mb-2">{{statistics.phd}}</p>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<div class="row justify-content-center d-none d-lg-block">
+  <div class="col-lg-10 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <div class="chartjs-size-monitor">
+          <div class="chartjs-size-monitor-expand">
+            <div class=""></div>
+          </div>
+          <div class="chartjs-size-monitor-shrink">
+            <div class="barChart"></div>
+          </div>
+        </div>
+        <h4 class="card-title">إحصائيات المعيدين </h4>
+        <canvas id="myChart" style="display: inline; height: 274px; width: 549px;" width="686" height="342"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row justify-content-center">
+  <div class="col-md-10 justify-content-center grid-margin stretch-card">
+    <div class="card row" style='background: inherit'>
+      <div class="card-body row justify-content-around cardss">
+        {% if user.is_superuser %}
+        <div class="col-12 col-lg-5 mb-3">
+          <div class="card card-inverse-light border-dark mb-3 mx-auto" style="background-color:#ffffff;">
+            <h5 class="card-header">
+              <i class="fa-solid fa-user-tie"></i>
+              <span class="mr-3"> لائحة الموظفين</span>
+            </h5>
+            <div class="card-body text-dark">
+              <p class="card-text">
+              <div class="intro-button mx-auto row justify-content-between align-items-center"> <span class="col-8"> قم
+                  بتسجيل موظف جديد للعمل في إدارة العلاقات الثقافية</span><a class="btn btn-primary btn-xl col-2 "
+                  href="{% url 'app:user_list' %}"><i class="fa-solid fa-arrow-left"></i></a></div>
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-lg-5 mb-3">
+          <div class="card card-inverse-light border-dark mb-3 mx-auto" style="background-color:#ffffff;">
+            <h5 class="card-header">
+              <i class="fa-solid fa-server"></i>
+              <span class="mr-3">لائحة السماحيات</span>
+            </h5>
+            <div class="card-body text-dark">
+              <p class="card-text">
+              <div class="intro-button mx-auto row justify-content-between align-items-center"> <span class="col-8">قم
+                  بإضافة السماحيات و تعديلها و تعديل بيانات الموظفين</span><a class="btn btn-primary btn-xl col-2 "
+                  href="/app/permissions"><i class="fa-solid fa-arrow-left"></i></a></div>
+              </p>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+        <div class="col-12 col-lg-5 mb-3">
+          <div class="card card-inverse-light border-dark mb-3 mx-auto" style="background-color:#ffffff;">
+            <h5 class="card-header">
+              <i class="fa-solid fa-user-graduate"></i>
+              <span class="mr-3"> تسجيل معيد</span>
+            </h5>
+            <div class="card-body text-dark">
+              <p class="card-text">
+              <div class="intro-button mx-auto row justify-content-between align-items-center"> <span class="col-8">قم
+                  بإدخال بيانات معيد جديد</span><a class="btn btn-primary btn-xl col-2 "
+                  href="{% url 'app:insert' %}"><i class="fa-solid fa-arrow-left"></i></a></div>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-lg-5 mb-3">
+          <div class="card card-inverse-light border-dark mb-3 mx-auto" style="background-color:#ffffff;">
+            <h5 class="card-header">
+              <i class="fa-solid fa-users"></i>
+              <span class="mr-3"> المعيدين</span>
+            </h5>
+            <div class="card-body text-dark">
+              <p class="card-text">
+              <div class="intro-button mx-auto row justify-content-between align-items-center"> <span class="col-8">حميع
+                  المعيدين المسجلين و البحث عنهم</span><a class="btn btn-primary btn-xl col-2 "
+                  href="{% url 'app:allDemonstrators' %}"><i class="fa-solid fa-arrow-left"></i></a></div>
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-lg-5 mb-3">
+          <div class="card card-inverse-light border-dark mb-3 mx-auto" style="background-color:#ffffff;">
+            <h5 class="card-header">
+              <i class="fa-solid fa-filter"></i>
+              <span class="mr-3"> استعلام</span>
+            </h5>
+            <div class="card-body text-dark">
+              <p class="card-text">
+              <div class="intro-button mx-auto row justify-content-between align-items-center"> <span class="col-8"> قم
+                  بالاستعلام عن المعيدين</span><a class="btn btn-primary btn-xl col-2 "><i
+                    class="fa-solid fa-arrow-left" href="{% url 'app:gett' %}"></i></a></div>
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-lg-5 mb-3">
+          <div class="card card-inverse-light border-dark mb-3 mx-auto" style="background-color:#ffffff;">
+            <h5 class="card-header">
+              <i class="fa-solid fa-envelope"></i>
+              <span class="mr-3">إرسال إيميل</span>
+            </h5>
+            <div class="card-body text-dark">
+              <p class="card-text">
+              <div class="intro-button mx-auto row justify-content-between align-items-center"> <span class="col-8">قم
+                  بإرسال إيميلات للمعيدين</span><a class="btn btn-primary btn-xl col-2 " href="{% url 'app:email' %}"><i
+                    class="fa-solid fa-arrow-left"></i></a></div>
+              </p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<script>
+
+  let data = {
+    labels: ["معيد", "عائد", "موفد", "معيد عائد", "مستنكف", "نقل خارج الجامعة", "إنهاء خدمات", "مستقيلٍ"],
+    datasets: [{
+      data: ["{{statistics.demonstrator}}", "{{statistics.returning}}", "{{statistics.envoy}}", "{{statistics.returning_demonstrator}}", "{{statistics.loathes}}", "{{statistics.transfer_outside_the_university}}", "{{statistics.end_services}}", "{{statistics.resigned}}"],
+      label: '# من المعيدين',
+      base: 0,
+      backgroundColor: [
+        'rgba(255, 99, 132, 0.2)',
+        'rgba(54, 162, 235, 0.2)',
+        'rgba(255, 206, 86, 0.2)',
+        'rgba(75, 192, 192, 0.2)',
+        'rgba(153, 102, 255, 0.2)',
+        'rgba(255, 159, 64, 0.2)',
+        'rgba(165, 165, 165, 0.2)',
+        'rgba(46, 58, 35, 0.2)'
+      ],
+      borderColor: [
+        'rgba(255,99,132,1)',
+        'rgba(54, 162, 235, 1)',
+        'rgba(255, 206, 86, 1)',
+        'rgba(75, 192, 192, 1)',
+        'rgba(153, 102, 255, 1)',
+        'rgba(255, 159, 64, 1)',
+        'rgba(165, 165, 165, 1)',
+        'rgba(46, 58, 35, 1)'
+      ],
+      categoryPercentage: 1,
+      borderWidth: 1,
+      fill: false
+    }]
+
+
+  }
+
+  new Chart("myChart", {
+    type: "bar",
+    data: data,
+    options: {
+      legend: { display: false },
+      title: {
+        display: true,
+
+      }
+    }
+  });
+</script>
+
+<script>
+
+
+  let partsGre = new Intl.DateTimeFormat('ar-US', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric'
+  }).formatToParts(Date.now());
+  let stringTime = ""
+  partsGre.forEach(part => {
+    if (part.type != 'literal') {
+      stringTime += part.value + " "
+    }
+  });
+  $("#dd").text(stringTime)
+  console.log(stringTime);
+</script>
+
+
+
+
+{% endblock %}

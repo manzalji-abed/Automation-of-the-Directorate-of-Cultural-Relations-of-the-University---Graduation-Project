@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+
+{% block head_title %}
+لائحة الأقسام
+{% endblock %}
+
+
+{% block style %}
+
+<style>
+    .sect {
+        margin: 50px;
+        height: 100vh;
+        padding: 50px 40px;
+    }
+
+    a {
+        color: black
+    }
+</style>
+
+{% endblock %}
+
+{% block content %}
+<div class="sec sect">
+
+    <div class="row">
+        <div class="col-6">
+            <h1 class="mb-5">الأقسام</h1>
+        </div>
+        <div class="col-6 d-flex justify-content-end">
+            <div>
+
+                <button class="btn btn btn-outline-primary" data-bs-toggle="modal"
+                    data-bs-target="#exampleModal">إضافة</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">إضافة قسم</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="{% url 'app:permissions_insert' %}" id="form" method="POST">
+                        {% csrf_token %}
+                        <div class="form-floating">
+                            <input type="text" class="form-control" name="permissionsCollege" placeholder="asdf" id="t">
+                            <label for="t">القسم</label>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">إغلاق</button>
+                    <button type="submit" form="form" class="btn btn-outline-primary">إضافة</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <form method="GET">
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon1"><i
+                    class="fa-sharp fa-solid fa-magnifying-glass"></i></span>
+            <input type="text" name="search" class="form-control" {% if query %} value="{{query}}" {% endif %}
+                placeholder="ابحث عن القسم">
+
+
+            <button type="submit" class="btn btn-outline-secondary">بحث</button>
+
+        </div>
+    </form>
+    <div class="list-group list-group-flush rounded">
+        {% for permissions in permissions %}
+        <li class="list-group-item mb-1 d-flex justify-content-between align-items-start">
+            <div>
+                <a href="{% url 'app:permissions_detail' permissions.pk %}">{{permissions.permissionsCollege }}</a>
+            </div>
+            <a href="{% url 'app:permissions_delete' permissions.pk %}">
+                <span class="badge bg-danger rounded-pill"><i class="fa-solid   fa-trash"></i></span>
+            </a>
+        </li>
+        {% empty %}
+        <p>لا يوجد أقسام بعد</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,578 @@
+{% extends "base.html" %}
+{% block head_title %}
+
+استعلام
+
+{% endblock %}
+
+
+{% load static %}
+<!-- something here for nothing  -->
+{% block style %}
+<link rel="stylesheet" href="{% static 'jQuery-QueryBuilder-2.6.2/dist/css/query-builder.default.min.css' %}">
+<!-- <link rel="stylesheet" href="{% static 'bootstrap-5.2.0/dist/css/bootstrap.min.css' %}" /> -->
+<link rel="stylesheet" href="{% static 'css/bootstrap-datepicker.standalone.min.css' %}">
+<link rel="stylesheet" href="{% static 'css/query.css' %}">
+
+<style>
+  .query-builder {
+    font-family: tajawal !important;
+  }
+
+
+  .query-builder .hide {
+    display: none;
+  }
+
+  .query-builder .pull-right {
+    float: right !important;
+  }
+
+  .query-builder .btn {
+    text-transform: none;
+    display: inline-block;
+    padding: 6px 12px;
+    margin-bottom: 0px;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.42857;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    touch-action: manipulation;
+    cursor: pointer;
+    user-select: none;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 4px;
+  }
+
+
+
+  .query-builder .btn-group>.btn {
+    position: relative;
+    float: left !important;
+    margin-left: 2px;
+    border-radius: 0.5rem;
+    padding: 4px 10px
+  }
+
+  .query-builder .btn-group>.btn:first-child {
+    border-radius: 0.5rem;
+  }
+
+  .query-builder .btn-group>.btn-primary:not(.disabled):not(.active) {
+    background-color: rgba(75, 73 ,172,0.3);
+  }
+
+  .form-inline {
+    display: block !important;
+  }
+
+  .btn-success {
+    color: #fff;
+    background-color: #4B49AC;
+    border-color: #4B49AC;
+  }
+
+  .btn-success:hover {
+    color: #fff;
+    background-color: #413f96;
+    border-color: #4B49AC;
+  }
+
+  #builder-basic_group_0 {
+    background-color: rgba(0, 0, 255, .1)
+  }
+</style>
+
+
+{% endblock %}
+
+{% block content %}
+
+<h2 class="tit mt-5">
+  استعلامات
+</h2>
+
+<div class="mt-5">
+  <div id="builder-basic" dir="ltr" style="direction: ltr !important; text-align: left;">
+  </div>
+  <div class="row mt-4 px-3 justify-content-between">
+    <div class="col-4 py-2">
+      <div class="btn-group">
+        <button class="btn btn-secondary reset mx-2" data-target="basic" id="btn-reset">إعادة تعيين</button>
+        <button class="btn btn-primary parse-json mx-2" data-target="basic" id="btn-get">استعلام</button>
+        <button class="btn btn-primary parse-json mx-2" data-target="basic" id="btn-get-all">استعلام عن الكل</button>
+      </div>
+    </div>
+    <div class="col-8">
+      <select class="fancy-select form-select" name="category" required="required" multiple="multiple">
+        <option value="all">كل الحقول</option>
+        <option value="name">الاسم</option>
+        <option value="fatherName">اسم الأب</option>
+        <option value="motherName">اسم الأم</option>
+        <option value="birthDate">تاريخ الميلاد</option>
+        <option value="gender">الجنس</option>
+        <option value="home">عنوان اﻹقامة</option>
+        <option value="residence">العنوان الحالي</option>
+        <option value="email">الإيميل</option>
+        <option value="mobile">رقم الهاتف المحمول</option>
+        <option value="telephone">رقم الهاتف الإرضي</option>
+        <option value="maritalStatus">الوضع الاجتماعي</option>
+        <option value="militarySituation">الوضع العسكري</option>
+        <option value="language">اللغة</option>
+        <option value="currentAdjective">الصفة الحالية</option>
+        <option value="nominationReason">سبب الترشيح</option>
+        <option value="contestAnnouncementDate">تاريخ المسابقة</option>
+        <option value="university">الجامعة</option>
+        <option value="college">الكلية</option>
+        <option value="section">القسم</option>
+        <option value="specialization">التخصص</option>
+        <option value="commencementAfterNominationDate">تاريخ المباشرة</option>
+        <option value="universityDegree">الشهادة الجامعية</option>
+        <option value="nominationDecision"> قرار الترشيح</option>
+        <option value="certificateOfExcellence"> شهادات التفوق</option>
+        <option value="graduateStudies">الدراسات العليا</option>
+        <option value="dispatch">الإيفادات</option>
+      </select>
+    </div>
+  </div>
+
+
+
+
+</div>
+
+
+
+{% endblock %}
+{% block files %}
+<script src="{% static 'jQuery-QueryBuilder-2.6.2/dist/js/query-builder.standalone.min.js' %}"></script>
+<script src="{% static 'jQuery-QueryBuilder-2.6.2/dist/i18n/query-builder.ar.js' %}"></script>
+
+
+<script src="{% static 'js/cdpicker.min.js' %}">
+
+</script>
+
+<script>
+  document.querySelectorAll('.fancy-select').forEach(
+    sel => fancyMultipleSelect(sel)
+  );
+
+  function fancyMultipleSelect(select) {
+    const options = select.querySelectorAll('option');
+
+    const fancySelect = document.createElement('div');
+    const optionsWrap = document.createElement('div');
+    const selectedWrap = document.createElement('div');
+    const selectCatsTxt = document.createTextNode('اختر الحقول...');
+
+    fancySelect.classList.add('fancy-select-wrap');
+    fancySelect.dataset.name = select.name;
+
+    optionsWrap.classList.add('options');
+
+    selectedWrap.classList.add('selected');
+    optionsWrap.setAttribute('id', 'colsSelected')
+    selectedWrap.appendChild(selectCatsTxt);
+
+    fancySelect.appendChild(selectedWrap);
+    fancySelect.appendChild(optionsWrap);
+
+    options.forEach(opt => {
+      const option = document.createElement('div');
+      const text = document.createTextNode(opt.textContent);
+
+      option.appendChild(text);
+
+      if (opt.classList.contains('subopt')) option.classList.add('subopt');
+
+      option.dataset.value = opt.value;
+      option.dataset.selected = opt.selected ? '1' : '0';
+
+      option.addEventListener('click', function (e) {
+        if (this.dataset.selected === '1') {
+          this.dataset.selected = '0';
+
+          select.querySelectorAll(
+            `option[value="${this.dataset.value}"]`
+          ).selected = false;
+        } else {
+          this.dataset.selected = '1';
+          select.querySelector(
+            `option[value="${this.dataset.value}"]`
+          ).selected = true;
+        }
+
+        refreshSelecteds(fancySelect);
+      });
+
+      optionsWrap.appendChild(option);
+    });
+
+    selectedWrap.addEventListener('click', function () {
+      this.parentNode.classList.toggle('expanded');
+    });
+
+    select.parentNode.insertBefore(fancySelect, select);
+
+    refreshSelecteds(fancySelect);
+  }
+
+  function refreshSelecteds(fancySelect) {
+    // Nodes of selected opts inside fancySelect
+    const selectedOptions = fancySelect.querySelectorAll(
+      '.options [data-selected="1"]'
+    );
+
+    // Original select
+    const originalSelect = fancySelect.nextElementSibling;
+
+    // Wrapper for our selected opts spans
+    const selectedWrap = fancySelect.querySelector('.selected');
+
+    // Remove currently selected options
+    while (selectedWrap.firstChild) {
+      selectedWrap.removeChild(selectedWrap.firstChild);
+    }
+
+    if (selectedOptions.length < 1) {
+      // No selected options, show empty msg
+      const selectCatsTxt = document.createTextNode('اختر الحقول...');
+      selectedWrap.appendChild(selectCatsTxt);
+    } else {
+      const usedOpts = [];
+
+      // Create selected opts spans and add to wrapper
+      selectedOptions.forEach(opt => {
+        // Prevent repeats
+        if (usedOpts.includes(opt.dataset.value)) return;
+
+        const span = document.createElement('span');
+        const text = document.createTextNode(opt.textContent);
+
+        span.appendChild(text);
+
+        span.addEventListener('click', function (e) {
+          e.stopImmediatePropagation();
+          opt.dataset.selected = '0';
+          originalSelect.querySelector(
+            `option[value="${opt.dataset.value}"]`
+          ).selected = false;
+
+          refreshSelecteds(fancySelect);
+        });
+
+        selectedWrap.appendChild(span);
+
+        usedOpts.push(opt.dataset.value);
+      });
+    }
+  }
+</script>
+
+
+<script>
+
+  function createElementFromHTML(htmlString) {
+    var div = document.createElement('div');
+    div.innerHTML = htmlString.trim();
+
+    // Change this to div.childNodes to support multiple top-level nodes.
+    return div.firstChild;
+  }
+  let csrf = createElementFromHTML(`{% csrf_token %}`)
+
+  function modifyKeys(obj) {
+    op = ["lt", "ne", "in", "nin", "lte", "gt", "gte", "regex"]
+    console.log(obj);
+    Object.keys(obj).forEach(key => {
+      if (key[0] === "$") {
+        obj[`${key.slice(1)}`] = obj[key];
+        delete obj[key];
+        key = key.slice(1)
+      }
+
+
+      if (typeof obj[`${key}`] === "object" && obj[`${key}`] !== null) {
+        modifyKeys(obj[`${key}`]);
+      }
+      if (op.includes(`${key}`)) {
+        console.log("asdfasdfadsfsda");
+        if (key === 'regex') {
+
+          obj[`__contains`] = obj[key];
+          delete obj[key];
+        } else if(key === 'begins_with'){
+          obj[`__starts_with`] = obj[key];
+          delete obj[key];
+        }else {
+          obj[`__${key}`] = obj[key];
+          delete obj[key];
+        }
+      }
+
+    });
+
+  }
+
+  $('#builder-basic').queryBuilder({
+
+    default_condition: 'AND',
+
+    filters: [
+      {
+        id: 'name',
+        label: 'الاسم',
+        type: 'string',
+        input: 'text',
+        operators: ['equal', 'contains', 'not_equal']
+      },
+      {
+        id: 'fatherName',
+        label: 'اسم الأب',
+        type: 'string',
+        input: 'text',
+        operators: ['equal', 'contains', 'not_equal']
+      },
+      {
+        id: 'motherName',
+        label: 'اسم الأم',
+        type: 'string',
+        input: 'text',
+        operators: ['equal', 'in', 'not_equal']
+      },
+      {
+        id: 'home',
+        label: 'عنوان الإقامة',
+        type: 'string',
+        input: 'text',
+        operators: ['contains']
+      },
+      {
+        id: 'residence',
+        label: 'عنوان الحالي',
+        type: 'string',
+        input: 'text',
+        operators: ['contains']
+      },
+      {
+        id: 'email',
+        label: 'الإيميل',
+        type: 'string',
+        input: 'text',
+        operators: ['equal', 'not_equal']
+      },
+      {
+        id: 'gender',
+        label: 'الجنس',
+        type: 'string',
+        input: 'select',
+        values: {
+          "male": 'ذكر',
+          "female": 'أنثى',
+        },
+        operators: ['equal']
+      }, {
+        id: 'birthDate',
+        label: 'تاريخ الميلاد',
+        type: 'string',
+        input: "text",
+        plugin: 'datepicker',
+        plugin_config: {
+          format: 'yyyy-mm-dd',
+          autoclose: true,
+          todayBtn: 'linked',
+          todayHighlight: true,
+        },
+        operators: ['equal', 'greater', 'less', 'greater_or_equal', 'less_or_equal']
+      },
+
+      {
+        id: 'maritalStatus',
+        label: 'الحالة الاجتماعية',
+        type: 'string',
+        input: "select",
+        values: {
+          'married': 'متزوج',
+          'unmarried': 'أعزب'
+        },
+        operators: ['equal']
+      }, {
+        id: 'militarySituation',
+        label: 'وضع التجنيد',
+        type: 'string',
+        input: "select",
+        values: {
+          'delayed': 'مؤجل',
+          'laid off': 'مسرح'
+        },
+        operators: ['equal']
+      }, {
+        id: 'language',
+        label: 'اللغة',
+        type: 'string',
+        input: "text",
+        operators: ['equal', 'not_equal']
+      }, {
+        id: 'currentAdjective',
+        label: 'الصفة الحالية',
+        type: 'string',
+        input: "select",
+        values: {
+          'demonstrator': 'معيد',
+          'returning': 'عائد',
+          'envoy': 'موفد',
+          'returning demonstrator': 'معيد عائد',
+          'loathes': 'مستنكف',
+          'transfer outside the university': 'نقل خارج الجامعة',
+          'end services': 'انهاء خدمات',
+          'resigned': 'انهاء بحكم المستقيل',
+        },
+        operators: ['equal', 'not_equal']
+      }, {
+        id: 'nominationReason',
+        label: 'سبب الترشيح',
+        type: 'string',
+        input: "select",
+        values: {
+          'contest': 'مسابقة',
+          'First graduate': 'خريج أول'
+        },
+        operators: ['equal']
+      }, {
+        id: 'universityDegree__universityDegreeUniversity',
+        label: 'الجامعة',
+        type: 'string',
+        input: "text",
+        operators: ['equal', 'not_equal']
+      },
+      {
+        id: "universityDegree__universityDegreeAverage",
+        label: "المعدل",
+        type: "double",
+        validation: {
+          min: 60,
+          step: 0.01,
+        },
+        operators: [
+          "equal",
+          "greater",
+          "less",
+          "greater_or_equal",
+          "less_or_equal",
+        ],
+      }, {
+        id: 'universityDegree__universityDegreeCollege',
+        label: 'الكلية',
+        type: 'string',
+        input: "text",
+        operators: ['equal', 'not_equal']
+      }, {
+        id: 'universityDegree__universityDegreeSection',
+        label: 'القسم',
+        type: 'string',
+        input: "text",
+        operators: ['equal', 'not_equal']
+      }, {
+        id: 'specialization',
+        label: 'التخصص',
+        type: 'string',
+        input: "text",
+        operators: ['equal', 'not_equal', 'contains']
+      },
+      {
+        id: 'dispatch__dispatchType',
+        label: 'نوع الإيفاد',
+        type: 'string',
+        input: 'select',
+        values: {
+          'inner': 'داخلي',
+          'outer': 'خارجي',
+        },
+        operators: ['equal']
+      }
+      ,],
+
+
+  });
+
+  $('#btn-reset').click(function () {
+
+    $('#builder-basic').queryBuilder('reset');
+  });
+
+  $('#btn-set').on('click', function () {
+    $('#builder-basic').queryBuilder('setRules', rules_basic);
+  });
+
+  $('#btn-get').on('click', function () {
+    var result = $('#builder-basic').queryBuilder('getMongo');
+    let cols = document.getElementById("colsSelected").querySelectorAll("div")
+    let values = []
+
+    cols.forEach(col => {
+      if (col.getAttribute("data-selected") == 1) {
+        values.push(col.getAttribute('data-value'))
+      }
+    })
+    if (!$.isEmptyObject(result)) {
+      let d = {}
+      modifyKeys(result)
+      if (values.length === 0) values.push("name")
+      d['csrfmiddlewaretoken'] = csrf.value;
+      d['cols'] = values
+      d['query'] = JSON.stringify(result)
+      console.log(d);
+      post("/app/query/", d, "post")
+      // alert(JSON.stringify(result, null, 2));
+    }
+  });
+
+  $('#btn-get-all').on('click', function () {
+    let cols = document.getElementById("colsSelected").querySelectorAll("div")
+    let values = []
+
+    cols.forEach(col => {
+      if (col.getAttribute("data-selected") == 1) {
+        values.push(col.getAttribute('data-value'))
+      }
+    })
+      let d = {}
+      if (values.length === 0) values.push("name")
+      d['csrfmiddlewaretoken'] = csrf.value;
+      d['cols'] = values
+      d['query'] = JSON.stringify({'or': []})
+      console.log(d);
+      post("/app/query/", d, "post")
+      // alert(JSON.stringify(result, null, 2));
+    
+  });
+
+  function post(path, params, method = 'post') {
+
+    // The rest of this code assumes you are not using a library.
+    // It can be made less verbose if you use one.
+    const form = document.createElement('form');
+    form.method = method;
+    form.action = path;
+
+    for (const key in params) {
+      if (params.hasOwnProperty(key)) {
+        const hiddenField = document.createElement('input');
+        hiddenField.type = 'hidden';
+        hiddenField.name = key;
+        hiddenField.value = params[key];
+
+        form.appendChild(hiddenField);
+      }
+    }
+
+    document.body.appendChild(form);
+    form.submit();
+  }
+
+</script>
+{% endblock %}

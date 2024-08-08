@@ -1,0 +1,288 @@
+{% extends "base.html" %} {% block head_title %}تسجيل معيد {% endblock %}
+
+<!-- something here for nothing  -->
+{% load static %}
+<!-- something here for nothing  -->
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/multi-select.min.css' %}">
+
+{% endblock %}
+
+{% block content %}
+
+
+<h2 class="tit">تسجيل معيد</h2>
+
+<div class="col-lg-10 col-md-6 mx-lg-auto sec">
+    <form class="p-3 needs-validation" novalidate method="POST">
+        {% csrf_token %}
+        <h4 class="my-3 lead">المعلومات الشخصية</h4>
+        <div class="row g-3">
+            <div class="col-12 col-lg-4">
+                <label for="name" class="form-label">الاسم</label>
+                <input type="text" class="form-control" id="firstName" required name="name" maxlength="50" />
+                <div class="invalid-feedback">يرجى إدخال اسم أول صحيح.</div>
+            </div>
+
+            <div class="col-12 col-lg-4">
+                <label for="lastName" class="form-label">اسم الأب</label>
+                <input type="text" class="form-control" id="lastName" name="fatherName" maxlength="50" required />
+                <div class="invalid-feedback">يرجى إدخال اسم صحيح.</div>
+            </div>
+            <div class="col-12 col-lg-4">
+                <label for="lastName" class="form-label">اسم الأم</label>
+                <input type="text" class="form-control" id="lastName" name="motherName" maxlength="50" required />
+                <div class="invalid-feedback">يرجى إدخال اسم صحيح.</div>
+            </div>
+
+            <div class="col-12 col-lg-6">
+                <label for="lastName" class="form-label">تاريخ الميلاد</label>
+
+                <input type="date" name="birthDate" class="form-control" id="date" required />
+
+                <div class="invalid-feedback">يرجى إدخال تاريخ صحيح.</div>
+            </div>
+
+            <div class="col-12 col-lg-6">
+                <label class="form-label" for="sex">الجنس</label>
+
+                <select class="form-select" id="sex" name="gender" required>
+                    <option value="">اختر...</option>
+                    <option value="male">ذكر</option>
+                    <option value="female">أنثى</option>
+                </select>
+                <div class="invalid-feedback">يرجى اختيار الجنس.</div>
+            </div>
+
+            <hr class="my-4" />
+            <h4 class="mb-3 lead">معلومات الاتصال</h4>
+            <div class="col-lg-4 col-md-12">
+                <label for="username" class="form-label">الإيميل</label>
+                <div class="input-group has-validation">
+                    <input type="email" class="form-control" id="username" placeholder="something@gmail.com"
+                        name="email" maxlength="254" required />
+                    <div class="invalid-feedback">
+                        يرجى إدخال عنوان بريد إلكتروني صحيح.
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-12">
+                <label for="address" class="form-label">مكان الإقامة</label>
+                <input type="text" class="form-control" id="address" placeholder="1234 الشارع الأول" name="home"
+                    maxlength="255" required />
+                <div class="invalid-feedback">يرجى إدخال مكان الإقامة.</div>
+            </div>
+
+            <div class="col-lg-4 mb-4 col-md-12">
+                <label for="address" class="form-label">العنوان الحالي</label>
+                <input type="text" class="form-control" id="address" placeholder="1234 الشارع الثاني" name="residence"
+                    maxlength="255" required />
+                <div class="invalid-feedback">يرجى إدخال العنوان الحالي.</div>
+            </div>
+
+            <div class="col-lg-6 col-md-12">
+                <label for="address" class="form-label">رقم الهاتف المحمول</label>
+                <input type="text" class="form-control" id="address" placeholder="09586564897"
+                    pattern="^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$" name="mobile" maxlength="25"
+                    required />
+                <div class="invalid-feedback">
+                    يرجى إدخال رقم الهاتف المحمول.
+                </div>
+            </div>
+
+            <div class=" col-md-12 col-lg-6">
+                <label for="address" class="form-label">رقم الهاتف الأرضي (إن وجد)</label>
+                <input type="text" class="form-control" id="address" placeholder="2148596"
+                    pattern="^([0-9]{3}[-]?)?[0-9]{7}$" name="telephone" maxlength="25" />
+            </div>
+
+            <hr class="my-4" />
+            <h4 class="mb-3 lead">الحالة الاجتماعية</h4>
+            <div class="col-12 col-lg-7">
+                <label for="social" class="form-label">الحالة العائلية</label>
+                <select class="form-select" id="social" name="maritalStatus" required>
+                    <option value="">اختر...</option>
+                    <option value="unmarried">أعزب</option>
+                    <option value="married">متزوج</option>
+                </select>
+                <div class="invalid-feedback">
+                    يرجى اختيار الحالة الاجتماعية.
+                </div>
+            </div>
+
+            <div class="col-12 col-lg-5">
+                <label for="mil" class="form-label">الوضع العسكري</label>
+                <select class="form-select" id="mil" name="militarySituation" required>
+                    <option value="">اختر...</option>
+                    <option value="delayed">مؤجل</option>
+                    <option value="laid off">مسرح</option>
+                </select>
+                <div class="invalid-feedback">يرجى اختيار الوضع العسكري.</div>
+            </div>
+        </div>
+
+        <hr class="my-4" />
+        <dtv class="row gy-3">
+            <h4 class="mb-3 lead">الشهادة الجامعية</h4>
+            <div class="col-12 col-lg-6">
+                <label for="cc-name" class="form-label">الجامعة</label>
+                <input type="text" class="form-control" name="universityDegreeUniversity" maxlength="100" required />
+
+                <div class="invalid-feedback">الجامعةمطلوبة</div>
+            </div>
+            <div class="col-12 col-lg-6">
+                <label for="cc-name" class="form-label">الكلية</label>
+                <select name="universityDegreeCollege" class="form-select" id="floatingSelect"
+                    aria-label="Floating label select example">
+                    <option selected>افتح القائمة لتختار الكلية :</option>
+                </select>
+
+                <div class="invalid-feedback">الكلية مطلوبة</div>
+            </div>
+            <div class="col-12 col-lg-6">
+                <label for="cc-name" class="form-label">القسم</label>
+                <input type="text" class="form-control" name="universityDegreeSection" maxlength="100" />
+            </div>
+
+            <div class="col-12 col-lg-6">
+                <label for="cc-name" class="form-label">سنة التخرج</label>
+                <input type="text" class="form-control" name="universityDegreeYear" pattern="^[0-9]{4}[-][0-9]{4}$"
+                    placeholder="2018-2019" required />
+                <div class="invalid-feedback">أدخل بتنسيق 2018-2019</div>
+            </div>
+
+            <div class="col-12 col-lg-6">
+                <label for="cc-name" class="form-label">معدل التخرج</label>
+                <input type="number" min="60" max="100" step="0.001" class="form-control" name="universityDegreeAverage"
+                    required />
+            </div>
+        </dtv>
+        <hr class="my-4" />
+
+        <div class="row gy-3">
+            <h4 class="mb-3 lead">معلومات تتعلق بقبول المعيد</h4>
+            <div class="col-12 col-lg-4">
+                <div class="form-floating mb-3">
+                    <input class="form-control" type="text" name="nominationDecisionNumber"
+                        id="nominationDecisionNumber" placeholder="nominationDecisionNumber" required />
+                    <label for="nominationDecisionNumber">رقم القرار</label>
+                </div>
+            </div>
+            <div class="col-12 col-lg-4">
+                <div class="form-floating mb-3">
+                    <select class="form-control" name="nominationDecisionType" required id="nominationDecisionType">
+                        <option value="">...</option>
+                        <option value="s">ش.ع</option>
+                        <option value="o">و</option>
+                        <option value="b">ب</option>
+                    </select>
+                    <label for="nominationDecisionType">نوع القرار</label>
+                </div>
+            </div>
+            <div class="col-12 col-lg-4">
+                <div class="form-floating mb-3">
+                    <input class="form-control" type="date" name="nominationDecisionDate" id="nominationDecisionDate"
+                        placeholder="nominationDecisionDate" lang="ar" required />
+                    <label for="nominationDecisionDate">تاريخ القرار</label>
+                </div>
+            </div>
+
+            <div class="col-12 col-lg-6">
+                <label for="cc-name" class="form-label">الجامعة</label>
+                <input type="text" class="form-control" name="university" maxlength="100" required />
+
+                <div class="invalid-feedback">الجامعة مطلوبة</div>
+            </div>
+            <div class="col-12 col-lg-6">
+                <label for="cc-name" class="form-label">الكلية</label>
+                <input type="text" class="form-control" name="college" maxlength="100" required />
+
+                <div class="invalid-feedback">الكلية مطلوبة</div>
+            </div>
+            <div class="col-12 col-lg-6">
+                <label for="cc-name" class="form-label">القسم</label>
+                <input type="text" class="form-control" name="section" maxlength="100" />
+            </div>
+            <div class="col-12 col-lg-6">
+                <label for="cc-name" class="form-label">الاختصاص</label>
+                <input type="text" class="form-control" name="specialization" maxlength="100" />
+            </div>
+
+            <div class="col-12 col-lg-6">
+                <label for="cc-name" class="form-label">اللغة</label>
+                <input type="text" class="form-control" id="cc-name" name="language" maxlength="50" required />
+
+                <div class="invalid-feedback">اللغة مطلوبة</div>
+            </div>
+
+            <div class="col-12 col-lg-6" id="state-father">
+                <label for="cc-number" class="form-label">نوع القبول</label>
+                <select class="form-select" id="state" name="nominationReason" required>
+                    <option value="">اختر...</option>
+                    <option value="First graduate">خريج أول</option>
+                    <option value="contest">مسابقة</option>
+                </select>
+                <div class="invalid-feedback">نوع القبول مطلوب</div>
+            </div>
+        </div>
+        <hr class="my-4" />
+
+        <div class="row gy-3 mt-2 justify-content-around">
+            <div class="col-12 col-lg-6 row">
+                <div class="mt-2" id="above-highd">
+                    <button id="highD" type="button" class="btn d-block mx-auto btn-outline-secondary">
+                        إضافة دراسات عليا
+                    </button>
+                </div>
+            </div>
+            <div class="col-12 col-lg-6 row">
+                <div class="mt-2" id="above-highc">
+                    <button id="highC" type="button" class="btn d-block mx-auto btn-outline-secondary">
+                        إضافة شهادات تفوق
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <hr class="my-4" />
+        <button class="w-100 btn btn-primary btn-lg" type="submit">
+            تسجيل معيد
+        </button>
+    </form>
+</div>
+
+
+<script src="{% static 'js/insert_page.js' %}"></script>
+<script src="{% static 'js/multi-select.js'%}"></script>
+
+<script>
+
+    $(document).ready(function () {
+        var selects = "{{select|escapejs}}";
+
+        selects = JSON.parse(selects)
+        let select = document.getElementById("floatingSelect");
+
+        console.log(typeof selects["data"])
+
+        selects["data"].forEach(o => {
+            let op = document.createElement("option")
+            op.value = o["permissionsCollege"]
+            op.text = o["permissionsCollege"]
+            select.add(op)
+        })
+
+
+
+        // new MultiSelectTag('floatingSelect')
+
+    });
+
+</script>
+
+{% endblock %}
+{% block files %}
+
+{% endblock %}

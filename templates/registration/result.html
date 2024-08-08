@@ -1,0 +1,253 @@
+{% extends "base.html" %} {% block head_title %}استعلام{% endblock %}
+
+<!-- something here for nothing  -->
+{% load static %}
+
+{% block style %}
+
+<link rel="stylesheet" href="{% static 'css/tabulator_bulma.min.css' %}">
+<style>
+    .tabulator-col {
+        color: #ffffff;
+        background: #324960 !important;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class=" w-100 h-100">
+    <h2 class="tit my-5">استعلام</h2>
+    <!-- <query-table src="{{result}}" cols="{{fields}}"></query-table> -->
+    <div id="dd" class="striped"></div>
+    <div><button id="download-csv" class="mt-5 mr-3 btn btn-lg btn-primary">تصدير</button></div>
+
+
+</div>
+
+{% endblock %}
+{% block files %}
+
+<script src="{% static 'js/lodash.js' %}"></script>
+
+
+
+<script src="{% static 'js/tabulater.min.js' %}"></script>
+
+<script>
+    let fes = {
+        name: 'الاسم',
+        fatherName: 'اسم الأب',
+        motherName: 'اسم الأم',
+        gender: 'الجنس',
+        birthDate: 'تاريخ الميلاد',
+        email: 'الإيميل',
+        telephone: 'رقم الهاتف الإرضي',
+        maritalStatus: 'الوضع الاجتماعي',
+        militarySituation: 'الوضع العسكري',
+        email: 'الإيميل',
+        language: 'اللغة',
+        currentAdjective: 'الصفة الحالية',
+        nominationReason: 'سبب الترشيح',
+        contestAnnouncementDate: 'تاريخ المسابقة',
+        university: 'الجامعة',
+        college: 'الكلية',
+        section: 'القسم',
+        universityDegree: 'الشهادة الجامعية',
+        specialization: 'التخصص',
+        nominationDecision: ' قرار الترشيح',
+        commencementAfterNominationDate: 'تاريخ المباشرة',
+        residence: 'العنوان الحالي',
+        mobile: 'رقم الهاتف المحمول',
+        home: 'عنوان اﻹقامة',
+    }
+    let regz = {
+        'male': 'ذكر',
+        'female': 'أنثى', 'married': 'متزوج',
+        'unmarried': 'أعزب', 'delayed': 'مؤجل',
+        'laid off': 'مسرح', 'demonstrator': 'معيد',
+        'returning': 'عائد',
+        'envoy': 'موفد',
+        'returning demonstrator': 'معيد عائد',
+        'loathes': 'مستنكف',
+        'transfer outside the university': 'نقل خارج الجامعة',
+        'end services': 'انهاء خدمات',
+        'resigned': 'انهاء بحكم المستقيل', 'contest': 'مسابقة',
+        'First graduate': 'خريج أول', 's': 'ش.ع',
+        'o': 'و',
+        'b': 'ب', '1': 'الأولى',
+        '2': 'الثانية',
+        '3': 'الثالثة',
+        '4': 'الرابعة',
+        '5': 'الخامسة',
+        '6': 'السادسة',
+        'g': 'تخرج', 'diploma': 'دبلوم',
+        'master': 'ماجستير',
+        'ph.d': 'دكتوراه', 'language': 'لغة', 'inner': 'داخلي',
+        'outer': 'خارجي', 'grant': 'منحة',
+        'seat': 'مقعد'
+    }
+    let allFields = [
+        "name",
+        "fatherName",
+        "motherName",
+        "birthDate",
+        "gender",
+        "home",
+        "residence",
+        "email",
+        "mobile",
+        "telephone",
+        "maritalStatus",
+        "militarySituation",
+        "language",
+        "currentAdjective",
+        "nominationReason",
+        "contestAnnouncementDate",
+        "university",
+        "college",
+        "section",
+        "specialization",
+        "commencementAfterNominationDate",
+        "universityDegree",
+        "nominationDecision",
+        "certificateOfExcellence",
+        "graduateStudies",
+        "dispatch"
+    ]
+
+</script>
+
+<script>
+    fixCer = (lob) => {
+        s = ''
+        lob.forEach(ob => {
+            s += `شهادة تفوق بالمرتبة ${_.get(regz, ob.certificateOfExcellenceDegree
+            )} في السنة${_.get(regz, ob.certificateOfExcellenceYear
+            )}, `
+        })
+        return s
+    }
+
+    fixGrad = (lob) => {
+        s = ''
+        lob.forEach(ob => {
+            s += `حائز على درجة ${_.get(regz, ob.graduateStudiesDegree)} من جامعة ${ob.graduateStudiesUniversity} من كلية ${ob.graduateStudiesCollege} قسم ${ob.graduateStudiesSection} تخصص ${ob.graduateStudiesSpecialzaion} بمعدل ${ob.graduateStudiesAverage} بتاريخ ${ob.graduateStudiesYear}, `
+        })
+        return s
+    }
+    fixNom = (ob) => {
+        let s = `قرار رقم ${ob.nominationDecisionNumber}/${_.get(regz, ob.nominationDecisionType)} بتاريخ ${ob.nominationDecisionDate}`
+        return s
+    }
+
+    fixUnv = (ob) => {
+        let s = `تخرج من كلية ${ob.universityDegreeCollege} من جامعة ${ob.universityDegreeUniversity} قسم ${ob.universityDegreeSection} بمعدل ${ob.universityDegreeAverage} بتاريخ ${ob.universityDegreeYear}`
+        return s
+    }
+    fixDis = (ob) => {
+        let s = `النفقة: ${_.get(regz, ob.alimony)}, بلد الإيفاد: ${ob.dispatchCountry}, رقم القرار و تاريخه: ${ob.dispatchDecisionNumber}/${_.get(regz, ob.dispatchDecisionType)} - ${ob.dispatchDecisionDate}, مدة الإيفاد: ${ob.dispatchDurationDay} يوم, ${ob.dispatchDurationMonth} شهر, ${ob.dispatchDurationYear} سنة, نوع الإيفاد : ${_.get(regz, ob.dispatchType)}`
+        return s
+    }
+
+    fixFr = (lob) => {
+        s = ''
+        lob.forEach(ob => {
+            s += `تجميد بالقرار رقم ${ob.freezeDecisionNumber}/${_.get(regz, ob.freezeDecisionType)} بتاريخ ${ob.freezeDecisionDate} لمدة ${ob.freezeDurationDay} يوم ${ob.freezeDurationMonth} شهر ${ob.freezeDurationYear} سنة, `
+        })
+        return s
+    }
+
+    fixEx = (lob) => {
+        s = ''
+        lob.forEach(ob => {
+            s += `تمديد بالقرار رقم ${ob.extensionDecisionNumber}/${_.get(regz, ob.extensionDecisionType)} بتاريخ ${ob.extensionDecisionDate} لمدة ${ob.extensionDurationDay} يوم ${ob.extensionDurationMonth} شهر ${ob.extensionDurationYear} سنة, `
+        })
+        return s
+    }
+
+    fixData = (da, fe) => {
+        let data = []
+        da.forEach(element => {
+            let dat = {}
+            if (fe[0] === 'all') {
+
+                allFields.forEach(r => {
+                    if (typeof element[r] !== "object")
+                        dat[fes[r]] = _.has(regz, element[r]) ? _.get(regz, element[r]) : element[r]
+                    else {
+                        if (r === "certificateOfExcellence") {
+                            dat["شهادات التفوق"] = fixCer(element[r])
+                        } else if (r === "graduateStudies") {
+                            dat["دراسات عليا"] = fixGrad(element[r])
+                        } else if (r === "nominationDecision") {
+                            dat["قرار الترشيح"] = fixNom(element[r])
+                        } else if (r === "universityDegree") {
+                            dat["الشهادة الجامعية"] = fixUnv(element[r])
+                        } else if (r === "dispatch") {
+                            element[r].forEach((el, index) => {
+                                dat[`إيفاد-${index + 1}`] = fixDis(el)
+                                dat[`تجميد-${index + 1}`] = fixFr(el.freeze)
+                                dat[`تمديد-${index + 1}`] = fixEx(el.extension)
+                            })
+                        }
+                    }
+                })
+            } else {
+                fe.forEach(r => {
+                    if (typeof element[r] !== "object")
+                        dat[fes[r]] = _.has(regz, element[r]) ? _.get(regz, element[r]) : element[r]
+                    else {
+                        if (r === "certificateOfExcellence") {
+                            dat["شهادات التفوق"] = fixCer(element[r])
+                        } else if (r === "graduateStudies") {
+                            dat["دراسات عليا"] = fixGrad(element[r])
+                        } else if (r === "nominationDecision") {
+                            dat["قرار الترشيح"] = fixNom(element[r])
+                        } else if (r === "universityDegree") {
+                            dat["الشهادة الجامعية"] = fixUnv(element[r])
+                        } else if (r === "dispatch") {
+                            element[r].forEach((el, index) => {
+                                dat[`إيفاد-${index + 1}`] = fixDis(el)
+                                dat[`تجميد-${index + 1}`] = fixFr(el.freeze)
+                                dat[`تمديد-${index + 1}`] = fixEx(el.extension)
+                            })
+                        }
+                    }
+                })
+            }
+            data.push(dat)
+        });
+        return data
+    }
+    let d = "{{result|escapejs}}"
+    d = JSON.parse(d)["data"]
+
+
+
+    let f = "{{fields}}".split(",")
+    let sortColumn = { column: 'الاسم', dir: 'desc' }
+    if (f[0] !== 'all')
+        sortColumn.column = fes[f[0]]
+
+    var table = new Tabulator("#dd", {
+        textDirection: "rtl",
+        data: fixData(d, f),
+        autoColumns: true,
+        maxHeight: '55vh',
+        layout: "fitDataStretch",
+        initialSort: [sortColumn]
+
+
+    });
+
+
+    document.getElementById("download-csv").addEventListener("click", function () {
+        table.download("csv", "data.csv", { bom: true });
+    });
+
+
+
+</script>
+
+{% endblock %}

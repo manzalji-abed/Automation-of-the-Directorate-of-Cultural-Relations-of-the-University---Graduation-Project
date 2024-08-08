@@ -1,0 +1,299 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en" class="rtl" dir="rtl">
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{% static 'css/skydash/css/vertical-layout-light/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/toastify.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+    <link rel="stylesheet" href="{% static 'fontawesome-free-6.2.1-web/css/all.css' %}" />
+    <link rel="stylesheet" href="{% static 'bootstrap-5.2.0/dist/css/bootstrap.rtl.min.css' %}" />
+    <style>
+        .navbar-toggler {
+            box-shadow: 0 0 0 0 !important;
+        }
+
+        main {
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+        }
+
+        .dt>a {
+            color: white !important;
+
+        }
+
+        .btn {
+            font-size: 0.875rem;
+            line-height: 1;
+            font-weight: 400;
+            border-radius: 15px;
+            text-align: center;
+            vertical-align: middle;
+            user-select: none;
+            padding: 0.875rem 1.5rem;
+            transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        }
+
+        .btn-primary {
+            color: #fff;
+            background-color: #4B49AC;
+            border-color: #4B49AC;
+        }
+
+        .btn-primary:hover {
+            color: #fff;
+            background-color: #413f96;
+            border-color: #4B49AC;
+        }
+    </style>
+
+    <title>{% block head_title %}STORE{% endblock %}</title>
+    {% block style %}{% endblock %}
+
+    <script src="{% static 'js/jquery-3.6.3.min.js' %}"></script>
+</head>
+
+<body>
+    <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row ">
+        <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
+            <a class="navbar-brand brand-logo " href="{% url 'app:home' %}"><img src="{% static 'images/logo.svg' %}"
+                    class="mr-2 h-100 w-auto" alt="logo"></a>
+            <!-- <a class="navbar-brand brand-logo-mini" href="{% url 'app:home' %}"><img
+                    src="{% static 'images/logo-mini.png' %}" alt="logo" style="width: 54px; height: auto"
+                    class="mr-2"></a> -->
+        </div>
+        <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
+            {% if user.is_superuser %}
+            <ul class="navbar-nav mr-lg-2">
+                <li class="nav-item nav-search  d-lg-block btn btn-primary dt"><a href="/app/upload">رفع</a>
+                </li>
+                <li class="nav-item nav-search  d-lg-block btn btn-primary dt"><a href="#" data-bs-toggle="modal"
+                        data-bs-target="#downloadd">تنزيل</a>
+                </li>
+            </ul>
+            {% endif %}
+
+            <ul class="navbar-nav navbar-nav-right">
+
+                <li class="nav-item nav-profile dropdown">
+                    <a class="nav-link tooltip-container " href="#" data-toggle="dropdown" id="profileDropdown">
+                        <img src="{% static 'images/user-logo.svg' %}" alt="profile">
+                        <span class="tooltip">{{user.username}}</span>
+                    </a>
+                </li>
+            </ul>
+
+        </div>
+    </nav>
+
+    <main class="container-fluid page-body-wrapper">
+        <nav class="sidebar sidebar-offcanvas" id="sidebar">
+            <ul class="nav">
+                <li class="nav-item" id="nav-1">
+                    <a class="nav-link" href="{% url 'app:home' %}">
+                        <i class="fa-solid fa-house menu-icon"></i>
+                        <span class="menu-title">الصفحة الرئيسية</span>
+                    </a>
+                </li>
+                {% if user.is_authenticated %} {% if user.is_superuser %}
+                <li class="nav-item" id="nav-2">
+                    <a class="nav-link" href="{% url 'app:user_list' %}">
+                        <i class="fa-solid fa-user-tie menu-icon"></i>
+                        <span class="menu-title">لائحة الموظفين</span>
+                    </a>
+                </li>
+                <li class="nav-item" id="nav-7">
+                    <a class="nav-link" href="/app/permissions">
+                        <i class="fa-solid fa-server menu-icon"></i>
+                        <span class="menu-title">لائحة الأقسام</span>
+                    </a>
+                </li>
+                {% endif %}
+                <li class="nav-item" id="nav-3">
+                    <a class="nav-link" href="{% url 'app:insert' %}"><i
+                            class="fa-solid fa-user-graduate menu-icon"></i><span class="menu-title">تسجيل
+                            معيد</span></a>
+                </li>
+                <li class="nav-item" id="nav-4">
+                    <a class="nav-link" href="{% url 'app:allDemonstrators' %}"><i
+                            class="fa-solid fa-users menu-icon"></i><span class="menu-title">المعيدين</span></a>
+                </li>
+                <li class="nav-item" id="nav-5">
+                    <a class="nav-link" href="{% url 'app:gett' %}"><i class="fa-solid fa-filter menu-icon"></i><span
+                            class="menu-title">استعلام</span></a>
+                </li>
+                {% if user.is_superuser %}
+                <li class="nav-item" id="nav-6">
+                    <a class="nav-link" href="{% url 'app:email' %}"><i class="fa-solid fa-envelope menu-icon"></i><span
+                            class="menu-title"> الإيميل</span></a>
+                </li>
+                {% endif %}
+                <li class="nav-item" id="nav-9">
+                    <a class="nav-link" href="{% url 'app:downloadDocumentation' %}"><i
+                            class="fa-solid fa-book menu-icon"></i><span class="menu-title"> دليل
+                            الاستخدام</span></a>
+                </li>
+                <li class="nav-item" id="nav-8">
+                    <a class="nav-link" href="{% url 'app:about_us' %}"><i
+                            class="fa-solid fa-circle-info menu-icon"></i><span class="menu-title"> من نحن</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'app:logout' %}"><i
+                            class="fa-solid fa-right-from-bracket menu-icon"></i><span class="menu-title">تسجيل
+                            الخروج</span></a>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'app:login' %} "><i
+                            class="fa-solid fa-right-to-bracket menu-icon"></i><span class="menu-title">تسجيل
+                            الدخول</span></a>
+                </li>
+
+                {% endif %}
+
+            </ul>
+        </nav>
+
+
+        <div class="main-panel rtl ">
+            <div class="content-wrapper">
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+
+        <div class="modal fade" id="downloadd" tabindex="-1" aria-labelledby="downloadd" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="downloadd"> تنزيل البيانات</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="/app/download/" id="down" method="POST">
+                            {% csrf_token %}
+
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="lastPull" id="flexRadioDefault1"
+                                    value="1" checked>
+                                <label class="form-check-label" for="flexRadioDefault1">
+                                    منذ آخر عملية سحب ({{user.lastPull.lastPullDate}})
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="lastPull" id="flexRadioDefault2"
+                                    value="2">
+                                <label class="form-check-label" for="flexRadioDefault2">
+                                    من تاريخ معين
+                                </label>
+                            </div>
+
+                            <div class="form-floating my-3">
+                                <input class="form-control" type="date" name="pullDate" id="dte"
+                                    placeholder="nominationDecisionDate" lang="ar" />
+                                <label for="nominationDecisionDate">منذ تاريخ </label>
+                            </div>
+
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إغلاق</button>
+                        <button type="submit" class="btn btn-primary" form="down">تنزيل</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+    {% block files %}{% endblock %}
+    <script>
+        let radioInput = document.getElementById('flexRadioDefault2');
+        let radioInput2 = document.getElementById('flexRadioDefault1');
+        let dte = document.getElementById('dte');
+
+        radioInput2.addEventListener('change', function () {
+
+            if (dte.hasAttribute("required")) {
+                dte.removeAttribute("required");
+            }
+        });
+
+        radioInput.addEventListener('change', function () {
+
+            if (dte.hasAttribute("required")) {
+                dte.removeAttribute("required");
+            } else {
+                dte.setAttribute("required", true);
+            }
+        });
+    </script>
+
+    <script src="{% static 'js/skydash/template.js' %}"></script>
+    <script src="{% static 'bootstrap-5.2.0/dist/js/bootstrap.min.js' %}"></script>
+    <!-- <script src="{% static 'js/popper.min.js' %}"></script> -->
+    <script type="text/javascript" src="{% static 'toastify-js' %}"></script>
+
+    {% if messages %}
+    <!-- asda  -->
+    {% for message in messages %}
+    <script type="text/javascript" language="JavaScript">
+        let grad = [
+            'linear-gradient(45deg, #ff0084, #ff8c00)',
+            'linear-gradient(-45deg, #00ff9c, #00d1ff)',
+            'linear-gradient(to right, #FFD700, #FF4500)',
+        ];
+
+        let k = '{{message.tags}}';
+
+        Toastify({
+            text: '{{message}}',
+            duration: 3000,
+            close: true,
+            gravity: "top", // `top` or `bottom`
+            position: "left", // `left`, `center` or `right`
+            stopOnFocus: true, // Prevents dismissing of toast on hover
+            style: {
+                background: k === 'error' ? grad[0] : k === "warning" ? grad[2] : grad[1],
+                width: "300px",
+                border: "16px",
+            },
+        }).showToast();
+    </script>
+
+    {% endfor %}
+    <!-- asdas -->
+    {% endif %}
+
+
+    <script>
+
+        (() => {
+            'use strict';
+
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            const forms = document.querySelectorAll('.needs-validation');
+
+            // Loop over them and prevent submission
+            Array.from(forms).forEach((form) => {
+                form.addEventListener(
+                    'submit',
+                    (event) => {
+                        if (!form.checkValidity()) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+
+                        form.classList.add('was-validated');
+                    },
+                    false
+                );
+            });
+        })();
+    </script>
+</body>
+
+</html>

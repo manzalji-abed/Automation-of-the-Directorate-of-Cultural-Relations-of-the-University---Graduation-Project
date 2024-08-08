@@ -1,0 +1,381 @@
+{% extends "base.html" %}
+{% block head_title %}
+من نحن
+{% endblock %}
+
+{% load static %}
+
+{% block style %}
+<style>
+    * {
+        font-family: Nunito, sans-serif;
+    }
+
+    .text-blk {
+        margin-top: 0px;
+        margin-right: 0px;
+        margin-bottom: 0px;
+        margin-left: 0px;
+        line-height: 25px;
+    }
+
+    .responsive-cell-block {
+        min-height: 75px;
+    }
+
+    .responsive-container-block {
+        min-height: 75px;
+        height: fit-content;
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        margin-top: 0px;
+        margin-right: auto;
+        margin-bottom: 0px;
+        margin-left: auto;
+        justify-content: space-evenly;
+    }
+
+    .outer-container {
+        padding-top: 10px;
+        padding-right: 50px;
+        padding-bottom: 10px;
+        padding-left: 50px;
+    }
+
+    .inner-container {
+        max-width: 1320px;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 50px;
+        margin-right: auto;
+        margin-bottom: 50px;
+        margin-left: auto;
+    }
+
+    .section-head-text {
+        margin-top: 0px;
+        margin-right: 0px;
+        margin-bottom: 5px;
+        margin-left: 0px;
+        font-size: 35px;
+        font-weight: 700;
+        line-height: 48px;
+        color: rgb(0, 135, 177);
+        margin: 0 0 10px 0;
+    }
+
+    .section-subhead-text {
+        font-size: 20px;
+        color: rgb(153, 153, 153);
+        line-height: 35px;
+        max-width: 470px;
+        text-align: center;
+        margin-top: 0px;
+        margin-right: 0px;
+        margin-bottom: 60px;
+        margin-left: 0px;
+    }
+
+    .img-wrapper {
+        width: 100%;
+    }
+
+    .team-card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .social-media-links {
+        width: 125px;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .name {
+        font-size: 20px;
+        font-weight: 700;
+        color: rgb(102, 102, 102);
+        margin-top: 0px;
+        margin-right: 0px;
+        margin-bottom: 5px;
+        margin-left: 0px;
+    }
+
+    .position {
+        font-size: 17px;
+        font-weight: 700;
+        color: rgb(0, 135, 177);
+        margin-top: 0px;
+        margin-right: 0px;
+        margin-bottom: 50px;
+        margin-left: 0px;
+    }
+
+    .team-img {
+        width: 100%;
+        height: 100%;
+    }
+
+    .team-card-container {
+        width: 200px;
+        margin: 0 0 40px 0;
+    }
+
+    @media (max-width: 500px) {
+        .outer-container {
+            padding: 10px 20px 10px 20px;
+        }
+
+        .section-head-text {
+            text-align: center;
+        }
+    }
+
+    article ul {
+        padding-inline-start: 1.5em;
+        font-weight: 400;
+    }
+
+    article ul ::marker {
+        content: ">";
+        color: #48b;
+    }
+
+    article ul ul ::marker {
+        content: ">>";
+    }
+
+    article li {
+        position: relative;
+        padding-inline-start: 0.5em;
+        padding-top: 1.5em;
+        border-bottom: 1px solid #48b 2;
+        cursor: default;
+        font-size: 1rem;
+        transition: color 0.4s;
+    }
+
+    article li::after {
+        content: attr(theLittleDetails);
+        position: absolute;
+        left: 15%;
+        bottom: calc(100% - 1.5em);
+        font-weight: 700;
+        padding: 1em 2em 2.5em;
+        pointer-events: none;
+        opacity: 0;
+        filter: drop-shadow(1px 2px 4px #000 3);
+        transition: opacity 0.4s;
+    }
+
+    article header {
+
+        margin-bottom: 40px;
+        text-align: right !important;
+
+    }
+
+    article p {
+        margin-right: 14px;
+        font-size: 1.1rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="responsive-container-block outer-container">
+    <article id="the-post" class="container-wrapper post-content">
+
+
+        <header class="entry-header-outer">
+
+
+            <div class="entry-header">
+                <h1 class="post-title entry-title">لمحة عن المديرية</h1>
+            </div><!-- .entry-header /-->
+
+
+        </header><!-- .entry-header-outer /-->
+
+
+        <p><strong>مهام مديرية العلاقات الدولية و الثقافية والعامة :</strong></p>
+        <ul class="entry-content entry clearfix">
+
+
+            <li> إعداد الاتفاقيات العلمية والثقافية والاتفاقيات التوأمة مع الجامعات الأخرى ومتابعتها.</li>
+            <li> متابعة كل ما يتعلق بالأساتذة الزائرين وفق الاتفاقيات الثقافية العامة والخاصة بين الجامعة والجامعات
+                الأخرى والأساتذة الزائرين المشاركين في الندوات والمؤتمرات.</li>
+            <li> الاهتمام بالسادة الأساتذة الزائرين العرب والأجانب واستقبالهم وإقامتهم وسفرهم.</li>
+            <li> إعداد البرامج السياحية للزائرين ومتابعة تنفيذها.</li>
+            <li> متابعة كل ما يتعلق بمعيدي الجامعة.</li>
+            <li> متابعة كل ما يتعلق بموفدي الجامعة وسفرهم.</li>
+            <li> اتخاذ الإجراءات اللازمة لتحقيق اللقاءات المختلفة من ندوات ومؤتمرات ومحاضرات وتأمين مستلزماتها.</li>
+            <li> اتخاذ الإجراءات اللازمة لمشاركة الجامعة في المعارض المحلية والدولية.</li>
+            <li> اعداد المعلومات المتعلقة بايفاد اعضاء الهيئة التدريسية بمهمات علمية ومتابعة شؤون ايفادهم.</li>
+            <li> التعريف بدور الجامعة وإنجازاتها ومساهماتها في المجتمع، وذلك بالتعاون مع المديريات المختصة في الجامعة.
+            </li>
+            <li> القيام بالترجمات اللازمة التي تتطلبها طبيعة العمل في المديرية أو التي تكلف إدارة الجامعة بها وإعداد
+                المراسلات باللغة الأجنبية.</li>
+
+
+        </ul><!-- .entry-content /-->
+
+
+    </article>
+
+    <h2 class="tit" style="width: 100%; margin-right: 165px; margin-top: 40px;">لمحة عن فريق التطوير</h2>
+
+
+    <div class="responsive-container-block inner-container">
+        <p class="text-blk section-head-text">
+            من نحن
+        </p>
+        <p class="text-blk section-subhead-text">
+
+            نحن فريق برمجة فعال وماهر مكرس لتقديم حلول برمجية مبتكرة. من خلال شغفنا بالبرمجة وحل المشكلات ، نسعى
+            جاهدين لإنشاء تطبيقات متطورة تلبي الاحتياجات الفريدة لعملائنا.
+        </p>
+        <div class="responsive-container-block">
+            <div class="responsive-cell-block wk-desk-3 wk-ipadp-3 wk-tab-6 wk-mobile-12 team-card-container">
+                <div class="team-card">
+                    <div class="img-wrapper">
+                        <img class="team-img" src="{% static 'images/avatar-1.svg' %}">
+                    </div>
+                    <p class="text-blk name">
+                        عبد الله بحلاق
+                    </p>
+                    <p class="text-blk position">
+                        Full-Stack Developer
+                    </p>
+                    <div class="social-media-links">
+                        <a href="https://www.linkedin.com/in/abdullah-buhlaq-a5245028a/" target="_blank">
+                            <i class="fa-brands fa-linkedin menu-icon"></i>
+                        </a>
+                        <a href="https://abdullah-buhlaq.netlify.app" target="_blank">
+                            <i class="fa-solid fa-globe menu-icon"></i>
+                        </a>
+                        <a href="https://t.me/Abdullah_Buhlaq" target="_blank">
+                            <i class="fa-brands fa-telegram menu-icon"></i>
+                        </a>
+                        <a href="mailto: 3bdullah.bu7la8@gmail.com">
+                            <i class="fa-brands fa-google menu-icon"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="responsive-cell-block wk-desk-3 wk-ipadp-3 wk-tab-6 wk-mobile-12 team-card-container">
+                <div class="team-card">
+                    <div class="img-wrapper">
+                        <img class="team-img" src="{% static 'images/avatar-2.svg' %}">
+                    </div>
+                    <p class="text-blk name">
+                        دعاء الفيحان
+                    </p>
+                    <p class="text-blk position">
+                        FrontEnd Developer
+                    </p>
+                    <div class="social-media-links">
+                        <a href="#" target="_blank">
+                            <i class="fa-brands fa-twitter menu-icon"></i>
+                        </a>
+                        <a href="https://www.facebook.com/profile.php?id=100074049603008" target="_blank">
+                            <i class="fa-brands fa-facebook menu-icon"></i>
+                        </a>
+                        <a href="https://t.me/Doaa_Fa" target="_blank">
+                            <i class="fa-brands fa-telegram menu-icon"></i>
+                        </a>
+                        <a href="mailto: 3bdullah.bu7la8@gmail.com">
+                            <i class="fa-brands fa-google menu-icon"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="responsive-cell-block wk-desk-3 wk-ipadp-3 wk-tab-6 wk-mobile-12 team-card-container">
+                <div class="team-card">
+                    <div class="img-wrapper">
+                        <img class="team-img" src="{% static 'images/avatar-1.svg' %}">
+                    </div>
+                    <p class="text-blk name">
+                        أنس الفيحان
+                    </p>
+                    <p class="text-blk position">
+                        Full-Stack Developer
+                    </p>
+                    <div class="social-media-links">
+                        <a href="https://anas-alfaihan.vercel.app/" target="_blank">
+                            <i class="fa-solid fa-globe menu-icon"></i>
+                        </a>
+                        <a href="https://www.linkedin.com/in/anas-alfaihan-79bb642a2/" target="_blank">
+                            <i class="fa-brands fa-linkedin menu-icon"></i>
+                        </a>
+                        <a href="https://t.me/AbuHamza998" target="_blank">
+                            <i class="fa-brands fa-telegram menu-icon"></i>
+                        </a>
+                        <a href="mailto: Anas-Alfaihan@protonmail.com" target="_blank">
+                            <i class="fa-brands fa-google menu-icon"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="responsive-cell-block wk-desk-3 wk-ipadp-3 wk-tab-6 wk-mobile-12 team-card-container">
+                <div class="team-card">
+                    <div class="img-wrapper">
+                        <img class="team-img" src="{% static 'images/avatar-1.svg' %}">
+                    </div>
+                    <p class="text-blk name">
+                        عبد الرحمن المنزلجي
+                    </p>
+                    <p class="text-blk position">
+                        BackEnd Developer
+                    </p>
+                    <div class="social-media-links">
+                        <a href="https://github.com/abedalrahmanmanzalji" target="_blank">
+                            <i class="fa-brands fa-github menu-icon"></i>
+                        </a>
+                        <a href="https://www.facebook.com/manzalji.abodi" target="_blank">
+                            <i class="fa-brands fa-facebook menu-icon"></i>
+                        </a>
+                        <a href="https://t.me/Manzalji" target="_blank">
+                            <i class="fa-brands fa-telegram menu-icon"></i>
+                        </a>
+                        <a href="mailto: manzaljiabdalrahman@gmail.com">
+                            <i class="fa-brands fa-google menu-icon"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="responsive-cell-block wk-desk-3 wk-ipadp-3 wk-tab-6 wk-mobile-12 team-card-container">
+                <div class="team-card">
+                    <div class="img-wrapper">
+                        <img class="team-img" src="{% static 'images/avatar-1.svg' %}">
+                    </div>
+                    <p class="text-blk name">
+                        عمر غالول
+                    </p>
+                    <p class="text-blk position">
+                        BackEnd Developer
+                    </p>
+                    <div class="social-media-links">
+                        <a href="https://www.linkedin.com/in/omar-ghaloul-9ba3a1255/" target="_blank">
+                            <i class="fa-brands fa-linkedin menu-icon"></i>
+                        </a>
+                        <a href="tel:+963947422599" target="_blank">
+                            <i class="fa-solid fa-phone menu-icon"></i>
+                        </a>
+                        <a href="https://t.me/Omar00G" target="_blank">
+                            <i class="fa-brands fa-telegram menu-icon"></i>
+                        </a>
+                        <a href="mailto: omarghaloul.ghaloul@gmail.com">
+                            <i class="fa-brands fa-google menu-icon"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

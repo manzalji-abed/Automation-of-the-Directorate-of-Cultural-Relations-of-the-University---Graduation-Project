@@ -1,0 +1,1483 @@
+{% extends "base.html" %} {% block head_title %} {{demonstrator.name}} {%endblock %} {% load static %} {% block style %}
+<link rel="stylesheet" href="{% static 'css/demonstrator.css' %}" />
+<link rel="stylesheet" href="{% static 'css/date-picker.min.css' %}" />
+<style>
+  caption {
+    caption-side: top !important;
+    text-align: right !important;
+    padding: 0px !important;
+    font-size: 18px !important;
+  }
+</style>
+{% endblock %}
+
+<!-- something here for nothing  -->
+
+{% load static %} {% block content %}
+
+<div id="keyTips" class="row justify-content-around d-none mr-0">
+  <div class="col-4">
+    <key>shift</key> + <key>enter</key> - حفظ التعديل
+  </div>
+  <div class="col-4">
+    <key>esc</key> - إلغاء التعديل
+  </div>
+</div>
+<section class="">
+
+  <class class="container">
+    <div id="nav" class="row align-items-center sjustify-content-between">
+
+      <h2 class="tit col-7 pt-5"><span class=" editable demon-{{demonstrator.id}}" name="name">
+          {{demonstrator.name}}</span>
+      </h2>
+
+      <div class="col-4 d-flex justify-content-end ml-4">
+        <button type="button" class="btn btn btn-outline-success ml-3" onclick="editDemon(event, '{{demonstrator.id}}')"
+          id="deb-{{demonstrator.id}}">تعديل</button>
+        <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal"
+          data-bs-target="#deleteDemon">حذف</button>
+      </div>
+
+      <div class="modal fade" id="deleteDemon" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog ">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="staticBackdropLabel">حذف معيد</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <p>هل أنت متأكد من حذف المعيد {{demonstrator.name}}</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">إغلاق</button>
+              <button type="button" class="btn btn-outline-warning"
+                onclick="del('demon', '{{demonstrator.id}}')">تأكيد</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </class>
+  <div class="acc" id="content">
+    <div class="accordions__accordion">
+
+      <div class="accordions__header">
+        <div class="accordions__container contain">
+          <h3 class="accordions__title">المعلومات الشخصية</h3>
+          <button class="accordions__button" onclick="toggleAccordion('Personal')">
+            <div class="accordions__icon">+</div>
+          </button>
+        </div>
+      </div>
+      <div style="width: 100%; background: #fff">
+        <div class="contain">
+          <div class="first accordions__content rich-text" id="personal-content">
+
+            <div class="grd mb-5">
+              <div class="gr-1">
+                <p class="ct">
+                  <span> اسم الأب:</span>
+                </p>
+                <p class="ct">
+                  <span> اسم الأم:</span>
+                </p>
+                <p class="ct">
+                  <span> الجنس:</span>
+                </p>
+                <p class="ct">
+                  <span> تاريخ الميلاد:</span>
+                </p>
+                <p class="ct">
+                  <span> الصفة الحالية:</span>
+                </p>
+              </div>
+              <div class="gr-2">
+                <p class="ct"><span class="editable demon-{{demonstrator.id}}"
+                    name="fatherName">{{demonstrator.fatherName}}</span></p>
+                <p class="ct"><span class="editable demon-{{demonstrator.id}}"
+                    name="motherName">{{demonstrator.motherName}}</span></p>
+                <div class="ct">
+                  <span class="editable demon-{{demonstrator.id}} mul" name="gender"
+                    value="{{demonstrator.gender}}">{{demonstrator.get_gender_display}}</span>
+                  <div class="d-none choises gender">
+                    <div><strong value="male">ذكر</strong></div>
+                    <div><strong value="female">أنثى</strong></div>
+                  </div>
+                </div>
+                <p class="ct">
+                  <span class="editable demon-{{demonstrator.id}}" name="birthDate"
+                    data-toggle="datepicker">{{demonstrator.birthDate|date:"m/d/Y"}}</span>
+                </p>
+                <div class="ct">
+                  <span class="editable demon-{{demonstrator.id}} mul" name="currentAdjective"
+                    value="{{demonstrator.currentAdjective}}">{{demonstrator.get_currentAdjective_display}}</span>
+                  <div class="d-none choises currentAdjective">
+                    <div><strong value="demonstrator">معيد</strong></div>
+                    <div><strong value="returning">عائد</strong></div>
+                    <div><strong value="envoy">موفد</strong></div>
+                    <div><strong value="returning demonstrator">معيد عائد</strong></div>
+                    <div><strong value="loathes">مستنكف</strong></div>
+                    <div><strong value="transfer outside the university">نقل خارج الجامعة</strong></div>
+                    <div><strong value="end services">انهاء خدمات</strong></div>
+                    <div><strong value="resigned">انهاء بحكم المستقيل</strong></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="accordions__accordion">
+      <div class="accordions__header">
+        <div class="accordions__container contain">
+          <h3 class="accordions__title">معلومات الاتصال</h3>
+          <button class="accordions__button" onclick="toggleAccordion('Contact')">
+            <div class="accordions__icon">+</div>
+          </button>
+        </div>
+      </div>
+      <div style="width: 100%; background: #fff">
+        <div class="contain">
+          <div class="second accordions__content rich-text" id="contact-content">
+            <div class="grd">
+              <div class="gr-1">
+                <p class="ct"><span> الإيميل:</span></p>
+                <p class="ct"><span> مكان الإقامة:</span></p>
+                <p class="ct">
+                  <span> العنوان الحالي:</span>
+                </p>
+                <p class="ct">
+                  <span> الهاتف المحمول:</span>
+                </p>
+                <p class="ct">
+                  <span> رقم الهاتف الأرضي:</span>
+                </p>
+              </div>
+              <div class="gr-2">
+                <p class="ct"><span class="editable demon-{{demonstrator.id}}"
+                    name="email">{{demonstrator.email}}</span>
+                </p>
+                <p class="ct"><span class="editable demon-{{demonstrator.id}}" name="home">{{demonstrator.home}}</span>
+                </p>
+                <p class="ct"><span class="editable demon-{{demonstrator.id}}"
+                    name="residence">{{demonstrator.residence}}</span></p>
+                <p class="ct"><span class="editable demon-{{demonstrator.id}}"
+                    name="mobile">{{demonstrator.mobile}}</span>
+                </p>
+                <p class="ct"><span class="editable demon-{{demonstrator.id}}"
+                    name="telephone">{{demonstrator.telephone|default:""}}</span></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordions__accordion">
+      <div class="accordions__header">
+        <div class="accordions__container contain">
+          <h3 class="accordions__title">الحالة الاجتماعية</h3>
+          <button class="accordions__button" onclick="toggleAccordion('Social')">
+            <div class="accordions__icon">+</div>
+          </button>
+        </div>
+      </div>
+      <div style="width: 100%; background: #fff">
+        <div class="contain">
+          <div class="third accordions__content rich-text" id="social-content">
+            <div class="grd">
+              <div class="gr-1">
+                <p class="ct">
+                  <span> الحالة العائلية:</span>
+                </p>
+                <p class="ct">
+                  <span> الوضع العسكري:</span>
+                </p>
+              </div>
+              <div class="gr-2">
+                <div class="ct">
+                  <span class="editable demon-{{demonstrator.id}} mul" name="maritalStatus"
+                    value="{{demonstrator.maritalStatus}}">{{demonstrator.get_maritalStatus_display}}</span>
+                  <div class="d-none choises maritalStatus">
+                    <div><strong value="married">متزوج</strong></div>
+                    <div><strong value="unmarried">أعزب</strong></div>
+                  </div>
+                </div>
+                <div class="ct">
+                  <span class="editable demon-{{demonstrator.id}} mul" name="militarySituation"
+                    value="{{demonstrator.militarySituation}}">{{demonstrator.get_militarySituation_display}}</span>
+                  <div class="d-none choises militarySituation">
+                    <div><strong value="delayed">مؤجل</strong></div>
+                    <div><strong value="laid off">مسرح</strong></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordions__accordion">
+      <div class="accordions__header">
+        <div class="accordions__container contain">
+          <h3 class="accordions__title">معلومات التعيين</h3>
+          <button class="accordions__button" onclick="toggleAccordion('Experience')">
+            <div class="accordions__icon">+</div>
+          </button>
+        </div>
+      </div>
+      <div style="width: 100%; background: #fff">
+        <div class="contain">
+          <div class="forth accordions__content" id="experience-content">
+            <div class="row g-0 ct" style="margin-bottom: 0 !important;">
+              <div class="text-lead text-muted fs-6 col-3 pr-0">
+                رقم القرار /<span class="editable demon-{{demonstrator.id}}"
+                  name="nominationDecisionNumber">{{demonstrator.nominationDecision.nominationDecisionNumber}}</span>/<span
+                  class="editable demon-{{demonstrator.id}} mul" name="nominationDecisionType"
+                  value="{{demonstrator.nominationDecision.nominationDecisionType}}">{{demonstrator.nominationDecision.get_nominationDecisionType_display}}
+                </span>
+                <div class="d-none choises nominationDecisionType">
+                  <div><strong value="s">ش.ع</strong></div>
+                  <div><strong value="o">و</strong></div>
+                  <div><strong value="b">ب</strong></div>
+                </div>
+              </div>
+              <p class="text-lead text-muted fs-6 col-2">
+                تاريخ
+
+                <span class="editable demon-{{demonstrator.id}}" name="nominationDecisionDate"
+                  data-toggle="datepicker">{{demonstrator.nominationDecision.nominationDecisionDate|date:"m/d/Y"}}</span>
+              </p>
+            </div>
+            <div class="grd">
+              <div class="gr-1">
+                <p class="ct">
+                  <span> الكلية:</span>
+                </p>
+                <p class="ct">
+                  <span> الجامعة:</span>
+                </p>
+                <p class="ct">
+                  <span> القسم:</span>
+                </p>
+                <p class="ct">
+                  <span> التخصص:</span>
+                </p>
+                <p class="ct">
+                  <span> اللغة:</span>
+                </p>
+                <p class="ct">
+                  <span> تاريخ المباشرة:</span>
+                </p>
+              </div>
+              <div class="gr-2">
+                <p class="ct">
+                  <span class="editable demon-{{demonstrator.id}}" name="college">{{demonstrator.college}}</span>
+                </p>
+                <p class="ct">
+                  <span class="editable demon-{{demonstrator.id}}" name="university">{{demonstrator.university}}</span>
+                </p>
+                <p class="ct">
+                  <span class="editable demon-{{demonstrator.id}}" name="section">{{demonstrator.section}}</span>
+                </p>
+                <p class="ct">
+                  <span class="editable demon-{{demonstrator.id}}"
+                    name="specialization">{{demonstrator.specialization}}</span>
+                </p>
+                <p class="ct">
+                  <span class="editable demon-{{demonstrator.id}}"
+                    name="language">{{demonstrator.language|default:""}}</span>
+                </p>
+                <p class="ct">
+                  <span class="editable demon-{{demonstrator.id}}" name="commencementAfterNominationDate"
+                    data-toggle="datepicker">{{demonstrator.commencementAfterNominationDate|date:"m/d/Y"}}</span>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordions__accordion">
+      <div class="accordions__header">
+        <div class="accordions__container contain">
+          <h3 class="accordions__title">الشهادة الجامعية</h3>
+          <button class="accordions__button" onclick="toggleAccordion('Unvdegree')">
+            <div class="accordions__icon">+</div>
+          </button>
+        </div>
+      </div>
+      <div style="width: 100%; background: #fff">
+        <div class="contain">
+          <div class="fifth accordions__content" id="unvdegree-content">
+            <div class="grd">
+              <div class="gr-1">
+                <p class="ct">
+                  <span> الكلية:</span>
+                </p>
+                <p class="ct">
+                  <span> الجامعة:</span>
+                </p>
+                <p class="ct">
+                  <span> القسم:</span>
+                </p>
+                <p class="ct">
+                  <span> السنة:</span>
+                </p>
+                <p class="ct">
+                  <span> المعدل:</span>
+                </p>
+              </div>
+              <div class="gr-2">
+                <p class="ct">
+                  <span class="editable unv-{{demonstrator.universityDegree.pk}}"
+                    name="universityDegreeCollege">{{demonstrator.universityDegree.universityDegreeCollege}}</span>
+                </p>
+                <p class="ct">
+                  <span class="editable unv-{{demonstrator.universityDegree.pk}}"
+                    name="universityDegreeUniversity">{{demonstrator.universityDegree.universityDegreeUniversity}}</span>
+                </p>
+                <p class="ct">
+                  <span class="editable unv-{{demonstrator.universityDegree.pk}}"
+                    name="universityDegreeSection">{{demonstrator.universityDegree.universityDegreeSection}}</span>
+                </p>
+                <p class="ct">
+                  <span class="editable unv-{{demonstrator.universityDegree.pk}}"
+                    name="universityDegreeYear">{{demonstrator.universityDegree.universityDegreeYear}}</span>
+                </p>
+                <p class="ct">
+                  <span class="editable unv-{{demonstrator.universityDegree.pk}}" name="universityDegreeAverage"
+                    oninput="formatEditableNumber(this)">{{demonstrator.universityDegree.universityDegreeAverage|floatformat:"2u"}}</span>
+                </p>
+              </div>
+            </div>
+
+            <button type="button" class="btn btn-sm btn-outline-success"
+              onclick="editUnv(event, '{{demonstrator.universityDegree.pk}}', '{{demonstrator.id}}')"
+              id="unveb-{{demonstrator.universityDegree.pk}}">تعديل</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+
+
+
+    <div class="accordions__accordion">
+      <div class="accordions__header">
+        <div class="accordions__container contain">
+          <h3 class="accordions__title">دراسات عليا</h3>
+          <button class="accordions__button" onclick="toggleAccordion('High')">
+            <div class="accordions__icon">+</div>
+          </button>
+        </div>
+      </div>
+      <div style="width: 100%; background: #fff">
+        <div class="contain">
+          <div class="sixth accordions__content" id="high-content">
+            <div class="mt-5">
+              {% for grad in demonstrator.graduateStudies.all %}
+              <div class="card mb-3">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-12">
+                      <div class="ct">
+                        <span>الشهادة:</span><span class=" grad-{{grad.id}} editable mul" name="graduateStudiesDegree"
+                          value="{{grad.graduateStudiesDegree}}">{{grad.get_graduateStudiesDegree_display}}</span>
+                        <div class="d-none choises graduateStudiesDegree">
+                          <div><strong value="diploma">دبلوم</strong></div>
+                          <div><strong value="master">ماجستير</strong></div>
+                          <div><strong value="ph.d">دكتوراه</strong></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-6">
+                      <p class="ct"><span>الكلية:</span><span class="grad-{{grad.id}} editable"
+                          name="graduateStudiesCollege">{{grad.graduateStudiesCollege}}</span></p>
+                    </div>
+                    <div class="col-6">
+                      <p class="ct"><span>الجامعة:</span><span class="grad-{{grad.id}} editable"
+                          name="graduateStudiesUniversity">{{grad.graduateStudiesUniversity}}</span></p>
+                    </div>
+                    <div class="col-6">
+                      <p class="ct"><span>القسم:</span><span class="grad-{{grad.id}} editable"
+                          name="graduateStudiesSection">{{grad.graduateStudiesSection}}</span></p>
+                    </div>
+                    <div class="col-6">
+                      <p class="ct"><span>الاختصاص:</span><span class="grad-{{grad.id}} editable"
+                          name="graduateStudiesSpecialzaion">{{grad.graduateStudiesSpecialzaion}}</span></p>
+                    </div>
+                    <div class="col-6">
+                      <p class="ct"><span>سنة التخرج:</span><span class="grad-{{grad.id}} editable"
+                          name="graduateStudiesYear">{{grad.graduateStudiesYear}}</span></p>
+                    </div>
+                    <div class="col-6">
+                      <p class="ct"><span>المعدل:</span><span class="grad-{{grad.id}} editable"
+                          name="graduateStudiesAverage"
+                          oninput="formatEditableNumber(this)">{{grad.graduateStudiesAverage|floatformat:"2u"}}</span>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-footer">
+                  <button type="button" class="btn btn-sm btn-outline-success"
+                    onclick="editGrad(event, '{{grad.pk}}', '{{demonstrator.id}}')"
+                    id="gradeb-{{grad.pk}}">تعديل</button>
+                </div>
+              </div>
+
+              {% endfor %}{% if not demonstrator.graduateStudies.all %} <p> لا يوجد دراسات عليا
+              </p>{% endif %}
+            </div>
+            <div class="row justify-content-center mt-5">
+              <div class="col-6 text-center">
+                <button type="button" class="btn btn-lg btn-outline-primary" data-bs-toggle="modal"
+                  data-bs-target="#Modalree{{demonstrator.id}}">إضافة دراسات عليا</button>
+              </div>
+            </div>
+            <div class="modal fade" id="Modalree{{demonstrator.id}}" tabindex="-1" aria-labelledby="ModalLabel{{i.id}}"
+              aria-hidden="true">
+              <div class="modal-dialog   modal-lg">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="ModalLabel{{demonstrator.id}}">إضافة دراسات عليا</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body fs-6">
+                    <form method="post" class="needs-validation" novalidate
+                      action="/app/reportinsert/{{demonstrator.id}}/">
+                      {% csrf_token %}
+
+                      <div class="form-floating mb-3">
+                        <select class="form-select" name="graduateStudiesDegree" id="graduateStudiesDegree" required>
+                          <option value="">اختر...</option>
+                          <option value="diploma">دبلوم</option>
+                          <option value="master">ماجستير</option>
+                          <option value="ph.d">دكتوراه</option>
+                        </select>
+                        <label class="graduateStudiesDegree">الشهادة</label>
+                      </div>
+                      <div class="row">
+                        <div class="col-6">
+                          <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="graduateStudiesUniversity"
+                              placeholder="graduateStudiesUniversity" name="graduateStudiesUniversity" maxlength="50"
+                              required />
+                            <label class="graduateStudiesUniversity">الجامعة</label>
+                          </div>
+                        </div>
+                        <div class="col-6">
+                          <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="graduateStudiesCollege"
+                              placeholder="graduateStudiesCollege" name="graduateStudiesCollege" maxlength="50"
+                              required />
+                            <label class="graduateStudiesCollege">الكلية</label>
+                          </div>
+                        </div>
+                        <div class="col-6">
+                          <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="graduateStudiesSection"
+                              placeholder="graduateStudiesSection" name="graduateStudiesSection" maxlength="50"
+                              required />
+                            <label class="graduateStudiesSection">القسم</label>
+                          </div>
+                        </div>
+                        <div class="col-6">
+                          <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="graduateStudiesSpecialzaion"
+                              placeholder="graduateStudiesSpecialzaion" name="graduateStudiesSpecialzaion"
+                              maxlength="50" required />
+                            <label class="graduateStudiesSpecialzaion">الاختصاص</label>
+                          </div>
+                        </div>
+                        <div class="col-6">
+                          <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="graduateStudiesYear"
+                              pattern="^[0-9]{4}[-][0-9]{4}$" placeholder="2018-2019" name="graduateStudiesYear"
+                              maxlength="50" required />
+                            <label class="graduateStudiesYear">سنة التخرج</label>
+                          </div>
+                        </div>
+                        <div class="col-6">
+                          <div class="form-floating mb-3">
+                            <input type="number" min="60" max="100" step="0.001" class="form-control"
+                              id="graduateStudiesAverage" name="graduateStudiesAverage" maxlength="50" required />
+                            <label class="graduateStudiesAverage">المعدل</label>
+                          </div>
+                        </div>
+                      </div>
+                      <input type="submit" value="إضافة" class="btn btn-outline-primary" />
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="accordions__accordion">
+      <div class="accordions__header">
+        <div class="accordions__container contain">
+          <h3 class="accordions__title">شهادات التفوق</h3>
+          <button class="accordions__button" onclick="toggleAccordion('Cer')">
+            <div class="accordions__icon">+</div>
+          </button>
+        </div>
+      </div>
+      <div style="width: 100%; background: #fff">
+        <div class="contain">
+          <div class="seventh accordions__content" id="cer-content">
+            <div class="row mt-5" id="certs">
+              {% for cer in demonstrator.certificateOfExcellence.all %}
+              <div class="col-3" id="cert-{{cer.id}}">
+                <div class="card border-primary mb-3" style="max-width: 20rem">
+                  <div class="card-header">
+                    <div class="row align-items-center">
+                      <div class="col-lg-9 col-md-7">شهادة تفوق</div>
+                      <div class="col-2">
+                        <button onclick="del('cert', '{{demonstrator.id}}', '{{cer.id}}')"
+                          class="btn btn-outline-danger btn-sm p-3"><i class="fa-solid fa-trash"></i></button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <p class="card-text">المرتبة: {{cer.get_certificateOfExcellenceDegree_display}}</p>
+                    <p class="card-text">السنة: {{cer.get_certificateOfExcellenceYear_display}}</p>
+                  </div>
+                </div>
+              </div>
+
+              {% endfor %}
+            </div>
+            {% if not demonstrator.certificateOfExcellence.all%} <p> لا يوجد شهادات تفوق </p>{% endif %}
+            <div class="row justify-content-center mt-5">
+              <div class="col-6 text-center">
+                <button type="button" class="btn btn-lg btn-outline-primary" data-bs-toggle="modal"
+                  data-bs-target="#Modalreee{{demonstrator.id}}">إضافة شهادة تفوق </button>
+              </div>
+              <div class="modal fade" id="Modalreee{{demonstrator.id}}" tabindex="-1"
+                aria-labelledby="ModalLabel{{i.id}}" aria-hidden="true">
+                <div class="modal-dialog   modal-lg">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h1 class="modal-title fs-5" id="ModalLabell{{demonstrator.id}}">إضافة شهادة تفوق</h1>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body fs-6">
+                      <form method="post" class="needs-validation" novalidate
+                        action="/app/insertExcellence/{{demonstrator.id}}/">
+                        {% csrf_token %}
+
+                        <div class="form-floating mb-3">
+                          <select class="form-select" name="certificateOfExcellenceDegree"
+                            id="certificateOfExcellenceDegree" required>
+                            <option value="">اختر...</option>
+                            <option value="1">الأول</option>
+                            <option value="2">الثاني</option>
+                            <option value="3">الثالث</option>
+                          </select>
+                          <label class="graduateStudiesDegree">الشهادة</label>
+                        </div>
+                        <div class="row">
+                          <div class="col-12">
+                            <div class="form-floating mb-3">
+                              <select class="form-select" name="certificateOfExcellenceYear" required>
+                                <option value="">اختر...</option>
+                                <option value="1">سنة أولى</option>
+                                <option value="2">سنة ثانية</option>
+                                <option value="3">سنة ثالثة</option>
+                                <option value="4">سنة رابعة</option>
+                                <option value="5">سنة خامسة</option>
+                                <option value="6">سنة سادسة</option>
+                                <option value="g">تخرج</option>
+                              </select>
+                              <label class="form-label">سنة الشهادة</label>
+                            </div>
+                          </div>
+                        </div>
+                        <input type="submit" value="إضافة" class="btn btn-outline-primary" />
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="accordions__accordion">
+      <div class="accordions__header">
+        <div class="accordions__container contain">
+          <h3 class="accordions__title">الإيفادات</h3>
+          <button class="accordions__button" onclick="toggleAccordion('Efad')">
+            <div class="accordions__icon">+</div>
+          </button>
+        </div>
+      </div>
+      <div style="width: 100%; background: #fff">
+        <div class="contain">
+          <div class="eigth accordions__content" id="efad-content">
+            <div class="row justify-content-center mx-auto mt-5" id="efds">
+              <div class="accordion" id="efads">
+                {% for i in demonstrator.dispatch.all %}
+                <div class="accordion-item" id="Efad-{{i.id}}">
+                  <h2 class="accordion-header" id="efad-{{i.id}}">
+                    <button class="accordion-button collapsed ct" style="margin-bottom: 0px !important" type="button"
+                      data-bs-toggle="collapse" data-bs-target="#info-{{i.id}}" aria-expanded="false"
+                      aria-controls="info-{{i.id}}"><span>شهادة
+                        الإيفاد:</span><span
+                        id="requiredCertificate">{{i.get_requiredCertificate_display}}</span></button>
+                  </h2>
+                  <div class="accordion-collapse collapse" id="info-{{i.id}}" aria-labelledby="efad-{{i.id}}"
+                    data-bs-parent="#efads">
+                    <div class="accordion-body">
+                      <div class="row">
+                        <div class="col-12 d-none mb-3" id="requiredCertificateo">
+                          <div class="ct">
+                            <span>شهادة الإيفاد:</span><span class=" efad-info-{{i.id}} editable mul"
+                              name="requiredCertificate"
+                              value="{{i.requiredCertificate}}">{{i.get_requiredCertificate_display}}</span>
+                            <div class="d-none choises requiredCertificate">
+                              <div><strong value="language">لغة</strong></div>
+                              <div><strong value="master">ماجستير</strong></div>
+                              <div><strong value="ph.d">دكتوراه</strong></div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-12 row g-0 ct" style="margin-bottom: 0 !important;">
+                          <div class="text-lead text-muted fs-6 col-2 col-md-4 mb-4 p-0">
+                            رقم القرار /<span class="efad-info-{{i.id}} editable"
+                              name="dispatchDecisionNumber">{{i.dispatchDecisionNumber}}</span>/<span
+                              class=" efad-info-{{i.id}} editable mul" name="dispatchDecisionType"
+                              value="{{i.dispatchDecisionType}}">{{i.get_dispatchDecisionType_display}} </span>
+                            <div class="d-none choises dispatchDecisionType">
+                              <div><strong value="s">ش.ع</strong></div>
+                              <div><strong value="o">و</strong></div>
+                              <div><strong value="b">ب</strong></div>
+                            </div>
+                          </div>
+                          <p class="text-lead text-muted fs-6 col-2 col-md-4">
+                            تاريخ
+
+                            <span class="efad-info-{{i.id}} editable" name="dispatchDecisionDate"
+                              data-toggle="datepicker">{{i.dispatchDecisionDate|date:"m/d/Y"}}</span>
+                          </p>
+                        </div>
+                      </div>
+
+                      <div class="row">
+                        <div class="ct col-6 mb-4">
+                          <span>نوع الإيفاد:</span><span class="efad-info-{{i.id}} editable mul" name="dispatchType"
+                            value="{{i.dispatchType}}">{{i.get_dispatchType_display}}</span>
+                          <div class="d-none choises dispatchType">
+                            <div>
+                              <strong value="inner">داخلي</strong>
+                            </div>
+                            <div><strong value="outer">خارجي</strong></div>
+                          </div>
+                        </div>
+                        <div class="ct col-6 mb-4">
+                          <span>النفقة:</span><span class="efad-info-{{i.id}} editable mul" name="alimony"
+                            value="{{i.alimony}}"> {{i.get_alimony_display|default:""}} </span>
+                          <div class="d-none choises alimony">
+                            <div>
+                              <strong value="grant">منحة</strong>
+                            </div>
+                            <div><strong value="seat">مقعد</strong></div>
+                          </div>
+                        </div>
+                        <p class="ct col-6"><span>بلد الإيفاد:</span><span class="efad-info-{{i.id}} editable"
+                            name="dispatchCountry">{{i.dispatchCountry}}</span></p>
+                        <p class="ct col-6"><span>جامعة الإيفاد:</span><span class="efad-info-{{i.id}} editable"
+                            name="dispatchUniversity">{{i.dispatchUniversity}}</span></p>
+                        <p class="ct col-6"><span>المشرف الداخلي:</span><span class="efad-info-{{i.id}} editable"
+                            name="innerSupervisor">{{i.innerSupervisor}}</span></p>
+                        <p class="ct col-6"><span>المشرف الخارجي:</span><span class="efad-info-{{i.id}} editable"
+                            name="outerSupervisor">{{i.outerSupervisor}}</span></p>
+                        <p class="ct col-6">
+                          <span>مدة الإيفاد</span>
+                          <span class="efad-info-{{i.id}} editable"
+                            name="dispatchDurationYear">{{i.dispatchDurationYear}}</span>سنة, <span
+                            class="efad-info-{{i.id}} editable"
+                            name="dispatchDurationMonth">{{i.dispatchDurationMonth}}</span>شهر, <span
+                            class="efad-info-{{i.id}} editable"
+                            name="dispatchDurationDay">{{i.dispatchDurationDay}}</span>يوم
+                        </p>
+
+                        <p class="ct col-6"><span>تاريخ المباشرة:</span><span data-toggle="datepicker"
+                            class="efad-info-{{i.id}} editable"
+                            name="commencementDate">{{i.commencementDate|date:"m/d/Y"}}</span></p>
+                        <p class="ct col-6"><span>تاريخ انتهاء الإيفاد:</span><span data-toggle="datepicker"
+                            class="efad-info-{{i.id}} editable"
+                            name="dispatchEndDate">{{i.dispatchEndDate|date:"m/d/Y"}}</span></p>
+                        <p class="ct col-6"><span> المدة المتبقية:</span><span class="">{{i.remainingTime|default:""}} {% if i.remainingTime %} يوم {% endif %}</span>
+                        </p>
+                        <p class="ct col-6"><span>تاريخ العودة:</span><span data-toggle="datepicker"
+                            class="efad-info-{{i.id}} editable" name="backDate">{{i.backDate|date:"m/d/Y"}}</span>
+                        </p>
+                        <p class="ct col-6"><span>تاريخ الدفاع:</span><span data-toggle="datepicker"
+                            class="efad-info-{{i.id}} editable" name="defenseDate">{{i.defenseDate|date:"m/d/Y"}}</span>
+                        </p>
+                        <p class="ct col-6"><span>تاريخ الحصول على الشهادة:</span><span data-toggle="datepicker"
+                            class="efad-info-{{i.id}} editable"
+                            name="gettingCertificateDate">{{i.gettingCertificateDate|date:"m/d/Y"}}</span></p>
+                        <p class="ct col-6"><span>تاريخ الوضع تحت تصرف الجامعة:</span><span data-toggle="datepicker"
+                            class="efad-info-{{i.id}} editable"
+                            name="atDisposalOfUniversityDate">{{i.atDisposalOfUniversityDate|date:"m/d/Y"}}</span>
+                        </p>
+                        <p class="ct col-6"><span>تاريخ آخر تقرير:</span><span class="efad-info-{{i.id}} editable"
+                            data-toggle="datepicker" name="lastReportDate">{{i.lastReportDate|date:"m/d/Y"}}</span></p>
+                        <p class="ct col-6">جدول التغييرات</p>
+                      </div>
+
+
+                      <div class="row g-0">
+                        <div class="col-6">
+                          <div class="form-floating mb-4">
+                            <textarea class="form-control w-100" placeholder="Leave a comment here"
+                              id="EfadfloatingText-{{i.id}}" rows="10" style="height: 150px"
+                              disabled>{{i.dispatchNotes}}</textarea>
+                            <label for="floatingText" class="fs-6">ملاحظات</label>
+                          </div>
+                        </div>
+                        <div class="col-6  mb-4 ">
+                          <div class="table-wrappe">
+                            <table class="fl-table">
+
+                              <thead>
+                                <tr>
+                                  <th>سنة</th>
+                                  <th>شهر</th>
+                                  <th>يوم</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {% for ch in i.durationChange.all %}
+                                <tr>
+                                  <td>{{ch.durationChangeDurationYear}}</td>
+                                  <td>{{ch.durationChangeDurationMonth}}</td>
+                                  <td>{{ch.durationChangeDurationDay}}</td>
+                                </tr>
+                                {% endfor %}
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+
+
+                      <div class="row">
+                        <div class="col-6">
+                          {% for ex in i.extension.all %}
+                          <div class="card card-outline-primary  mb-3" id="Extension-{{ex.id}}">
+                            <div class="card-header">
+                              <div class="text-lead text-muted fs-6 d-inline-block" style="margin-left: 20px">
+                                رقم القرار /<span class="ex-{{ex.id}} editable"
+                                  name="extensionDecisionNumber">{{ex.extensionDecisionNumber}}</span>/<span
+                                  class="ex-{{ex.id}} editable mul" name="extensionDecisionType"
+                                  name="extensionDecisionType"
+                                  value="{{ex.extensionDecisionType}}">{{ex.get_extensionDecisionType_display}}</span>
+                                <div class="d-none choises extensionDecisionType">
+                                  <div><strong value="s">ش.ع</strong></div>
+                                  <div><strong value="o">و</strong></div>
+                                  <div><strong value="b">ب</strong></div>
+                                </div>
+                              </div>
+                              <div class="text-lead text-muted fs-6 d-inline-block">
+                                تاريخ
+                                <span class="ex-{{ex.id}} editable" name="extensionDecisionDate"
+                                  data-toggle="datepicker">{{ex.extensionDecisionDate|date:"m/d/Y"}}</span>
+                              </div>
+                            </div>
+                            <div class="card-body">
+                              <div class="row align-items-center justify-content-between mb-2">
+                                <div class="col-4 pt-3">
+                                  <p class="fs-5">مدة التمديد</p>
+                                </div>
+                                <div class="col-4 text-end"><button type="button"
+                                    class="btn btn-sm btn-outline-success mb-md-2"
+                                    onclick="editEx(event,'{{ex.id}}', '{{demonstrator.id}}')"
+                                    id="exeb-{{ex.id}}">تعديل</button>
+                                  <button type="button" class="btn btn-outline-danger mb-md-2" data-bs-toggle="modal"
+                                    data-bs-target="#deleteEx-{{ex.id}}">حذف</button>
+                                  <div class="modal fade" id="deleteEx-{{ex.id}}" data-bs-backdrop="static"
+                                    data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
+                                    aria-hidden="true">
+                                    <div class="modal-dialog ">
+                                      <div class="modal-content">
+                                        <div class="modal-header">
+                                          <h1 class="modal-title fs-5" id="staticBackdropLabel">حذف تمديد</h1>
+                                          <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                          <p>هل أنت متأكد من حذف هذا التمديد</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                          <button type="button" class="btn btn-outline-secondary"
+                                            data-bs-dismiss="modal">إغلاق</button>
+                                          <button type="button" class="btn btn-outline-warning" data-bs-dismiss="modal"
+                                            onclick="del('ex', '{{demonstrator.id}}', '{{ex.id}}')">تأكيد</button>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div class="row">
+                                <div class="col-4">
+                                  <p class="ct"><span>سنة:</span><span class="ex-{{ex.id}} editable"
+                                      name="extensionDurationYear">{{ex.extensionDurationYear|default:"0"}}</span></p>
+                                </div>
+                                <div class="col-4">
+                                  <p class="ct"><span>شهر:</span><span class="ex-{{ex.id}} editable"
+                                      name="extensionDurationMonth">{{ex.extensionDurationMonth|default:"0"}}</span></p>
+                                </div>
+                                <div class="col-4">
+                                  <p class="ct"><span>يوم:</span><span class="ex-{{ex.id}} editable"
+                                      name="extensionDurationDay">{{ex.extensionDurationDay|default:"0"}}</span></p>
+                                </div>
+                                {% if ex.emailSent == False %}
+                                <p style="color:crimson">لم يتم إرسال إيميل لهذا الإيفاد <a
+                                    href="/app/extensionEmail/{{i.id}}/{{demonstrator.id}}/{{ex.id}}"
+                                    style="text-decoration:underline !important; color:inherit">اضغط هنا للإرسال</a></p>
+                                {% endif %}
+                              </div>
+                            </div>
+                          </div>
+                          {% endfor %}
+                        </div>
+                        <div class="col-6">
+                          {% for fr in i.freeze.all %}
+                          <div class="card card-outline-warning mb-3" id="Freeze-{{fr.id}}">
+                            <div class="card-header">
+                              <div class="text-lead text-muted fs-6 d-inline-block" style="margin-left: 20px">
+                                رقم القرار /<span class="fr-{{fr.id}} editable"
+                                  name="freezeDecisionNumber">{{fr.freezeDecisionNumber}}</span>/<span
+                                  class="fr-{{fr.id}} editable mul" name="freezeDecisionType"
+                                  value="{{fr.freezeDecisionType}}">{{fr.get_freezeDecisionType_display}}</span>
+                                <div class="d-none choises freezeDecisionType">
+                                  <div><strong value="s">ش.ع</strong></div>
+                                  <div><strong value="o">و</strong></div>
+                                  <div><strong value="b">ب</strong></div>
+                                </div>
+                              </div>
+                              <div class="text-lead text-muted fs-6 d-inline-block">
+                                تاريخ
+                                <span class="fr-{{fr.id}} editable" name="freezeDecisionDate"
+                                  data-toggle="datepicker">{{fr.freezeDecisionDate|date:"m/d/Y"}}</span>
+                              </div>
+                            </div>
+                            <div class="card-body">
+                              <div class="row align-items-center justify-content-between mb-2">
+                                <div class="col-4 pt-3">
+                                  <p class="fs-5">مدة التجميد</p>
+                                </div>
+                                <div class="col-4 text-end">
+                                  <button type="button" class="btn btn-sm btn-outline-success mb-md-2"
+                                    onclick="editFrez(event,'{{fr.id}}', '{{demonstrator.id}}')"
+                                    id="freb-{{fr.id}}">تعديل</button>
+                                  <button type="button" class="btn btn-outline-danger mb-md-2" data-bs-toggle="modal"
+                                    data-bs-target="#deleteFr-{{fr.id}}">حذف</button>
+                                  <div class="modal fade" id="deleteFr-{{fr.id}}" data-bs-backdrop="static"
+                                    data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
+                                    aria-hidden="true">
+                                    <div class="modal-dialog ">
+                                      <div class="modal-content">
+                                        <div class="modal-header">
+                                          <h1 class="modal-title fs-5" id="staticBackdropLabel">حذف تجميد</h1>
+                                          <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                          <p>هل أنت متأكد من حذف هذا التجميد</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                          <button type="button" class="btn btn-outline-secondary"
+                                            data-bs-dismiss="modal">إغلاق</button>
+                                          <button type="button" class="btn btn-outline-warning"
+                                            onclick="del('fr', '{{demonstrator.id}}', '{{fr.id}}')"
+                                            data-bs-dismiss="modal">تأكيد</button>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div class="row">
+                                <div class="col-4">
+                                  <p class="ct"><span>سنة:</span><span class="fr-{{fr.id}} editable"
+                                      name="freezeDurationYear">{{fr.freezeDurationYear|default:"0"}}</span></p>
+                                </div>
+                                <div class="col-4">
+                                  <p class="ct"><span>شهر:</span><span class="fr-{{fr.id}} editable"
+                                      name="freezeDurationMonth">{{fr.freezeDurationMonth|default:"0"}}</span></p>
+                                </div>
+                                <div class="col-4">
+                                  <p class="ct"><span>يوم:</span><span class="fr-{{fr.id}} editable"
+                                      name="freezeDurationDay">{{fr.freezeDurationDay|default:"0"}}</span></p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          {% endfor %}
+                        </div>
+                      </div>
+
+                      <div class="offcanvas offcanvas-end" data-bs-scroll="true" data-bs-backdrop="true" tabindex="-1"
+                        id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
+                        <div class="offcanvas-header">
+                          <h5 class="offcanvas-title" id="offcanvasScrollingLabel">التقارير</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
+                            aria-label="Close"></button>
+                        </div>
+                        <div class="offcanvas-body">
+                          <div class="row">
+                            {% for re in i.report.all %}
+                            <div class="col-12">
+                              <div class="card mb-2">
+                                <div class="card-header fs-6 text-muted">{{re.reportDate|date:"m/d/Y"}}</div>
+                                <div class="card-body">
+                                  <p class="card-text fs-6">{{re.report}}</p>
+                                </div>
+                              </div>
+                            </div>
+                            {% endfor %}
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="row mt-3">
+                        <div class="col-4">
+                          <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas"
+                            data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling">التقارير</button>
+                        </div>
+                        <div class="col-8 text-center justify-content-end">
+                          <button type="button" class="btn btn-outline-warning mr-1 mb-1" data-bs-toggle="modal"
+                            data-bs-target="#Modalfr{{i.id}}">إضافة تجميد</button>
+                          <button type="button" class="btn btn-outline-primary mr-1 mb-1" data-bs-toggle="modal"
+                            data-bs-target="#Modalex{{i.id}}">إضافة تمديد</button>
+                          <button type="button" class="btn btn-outline-success mr-1 mb-1"
+                            onclick="editEfad(event,'{{i.id}}', '{{demonstrator.id}}')"
+                            id="efeb-{{i.id}}">تعديل</button>
+                          <button type="button" class="btn btn-outline-info mr-1 mb-1" data-bs-toggle="modal"
+                            data-bs-target="#Modalre{{i.id}}">إضافة تقرير</button>
+                          <button type="button" class="btn btn-outline-secondary mr-1 mb-1" data-bs-toggle="modal"
+                            data-bs-target="#Modalch{{i.id}}">تغيير المدة</button>
+                          <button type="button" class="btn btn-outline-danger mr-1 mb-1" data-bs-toggle="modal"
+                            data-bs-target="#deleteEfad-{{i.id}}">حذف</button>
+                        </div>
+
+                        <div class="modal fade" id="deleteEfad-{{i.id}}" data-bs-backdrop="static"
+                          data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
+                          aria-hidden="true">
+                          <div class="modal-dialog ">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="staticBackdropLabel">حذف الإيفاد</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                  aria-label="Close"></button>
+                              </div>
+                              <div class="modal-body">
+                                <p>هل أنت متأكد من حذف هذا الإيفاد</p>
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-outline-secondary"
+                                  data-bs-dismiss="modal">إغلاق</button>
+                                <button type="button" class="btn btn-outline-warning" data-bs-dismiss="modal"
+                                  onclick="del('efad', '{{demonstrator.id}}', '{{i.id}}')">تأكيد</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="modal fade" id="Modalch{{i.id}}" tabindex="-1" aria-labelledby="ModalLabel{{i.id}}"
+                        aria-hidden="true">
+                        <div class="modal-dialog   modal-lg">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h1 class="modal-title fs-5" id="ModalLabel{{i.id}}">إضافة تغيير للمدة</h1>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body fs-6">
+                              <form method="post" class="needs-validation" novalidate
+                                action="/app/durationInsert/{{i.id}}/{{demonstrator.id}}/">
+                                {% csrf_token %}
+
+                                <div class="row">
+                                  <p class="col-12">مدة التغيير</p>
+                                  <div class="col-4">
+                                    <div class="form-floating mb-3">
+                                      <input type="number" class="form-control" id="floatinyear" placeholder="0"
+                                        name="durationChangeDurationYear" min="0" value="0" required />
+                                      <label for="floatinyear">سنة</label>
+                                    </div>
+                                  </div>
+                                  <div class="col-4">
+                                    <div class="form-floating mb-3">
+                                      <input type="number" class="form-control" id="floatinmonth" placeholder="0"
+                                        name="durationChangeDurationMonth" value="0" min="0" required />
+                                      <label for="floatinmonth">شهر</label>
+                                    </div>
+                                  </div>
+                                  <div class="col-4">
+                                    <div class="form-floating mb-3">
+                                      <input type="number" class="form-control" id="floatinday" placeholder="0"
+                                        name="durationChangeDurationDay" value="0" min="0" required />
+                                      <label for="floatinday">يوم</label>
+                                    </div>
+                                  </div>
+                                </div>
+                                <input type="submit" value="إضافة" class="btn btn-outline-primary" />
+                              </form>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="modal fade" id="Modalre{{i.id}}" tabindex="-1" aria-labelledby="ModalLabel{{i.id}}"
+                        aria-hidden="true">
+                        <div class="modal-dialog   modal-lg">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h1 class="modal-title fs-5" id="ModalLabel{{i.id}}">إضافة تقرير</h1>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body fs-6">
+                              <form method="post" class="needs-validation" novalidate
+                                action="/app/reportinsert/{{i.id}}/{{demonstrator.id}}/">
+                                {% csrf_token %}
+
+                                <div class="form-floating mb-3">
+                                  <input type="date" class="form-control" id="floatingd" placeholder="02/15/2023"
+                                    name="reportDate" required />
+                                  <label for="floatingd">تاريخ التقرير</label>
+                                </div>
+                                <div class="form-floating mb-3">
+                                  <textarea class="form-control" name="report" placeholder="Leave a comment here"
+                                    id="floatingTextarea2" style="height: 100px"></textarea>
+                                  <label for="floatingTextarea2">التقرير</label>
+                                </div>
+                                <input type="submit" value="إضافة" class="btn btn-outline-primary" />
+                              </form>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="modal fade" id="Modalex{{i.id}}" tabindex="-1" aria-labelledby="ModalLabel{{i.id}}"
+                        aria-hidden="true">
+                        <div class="modal-dialog   modal-lg">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h1 class="modal-title fs-5" id="ModalLabel{{i.id}}">إضافة تمديد</h1>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body fs-6">
+                              <form method="post" class="needs-validation" novalidate
+                                action="/app/extinsert/{{i.id}}/{{demonstrator.id}}/">
+                                {% csrf_token %}
+
+                                <div class="form-floating mb-3">
+                                  <input type="text" class="form-control" id="floatingInput" placeholder="210"
+                                    name="extensionDecisionNumber" required />
+                                  <label for="floatingInput">رقم القرار </label>
+                                </div>
+                                <div class="form-floating mb-3">
+                                  <select name="extensionDecisionType" class="form-control" id="floatingPassword"
+                                    required>
+                                    <option value="">...</option>
+                                    <option value="s">ش.ع</option>
+                                    <option value="o">و</option>
+                                    <option value="b">ب</option>
+                                  </select>
+                                  <label for="floatingPassword">نوع القرار</label>
+                                </div>
+                                <div class="form-floating mb-3">
+                                  <input type="date" class="form-control" id="floatingd" placeholder="02/15/2023"
+                                    name="extensionDecisionDate" required />
+                                  <label for="floatingd">تاريخ القرار</label>
+                                </div>
+                                <div class="row">
+                                  <p class="col-12">مدة التمديد</p>
+                                  <div class="col-4">
+                                    <div class="form-floating mb-3">
+                                      <input type="number" class="form-control" id="floatinyear" placeholder="0"
+                                        name="extensionDurationYear" value="0" min="0" required />
+                                      <label for="floatinyear">سنة</label>
+                                    </div>
+                                  </div>
+                                  <div class="col-4">
+                                    <div class="form-floating mb-3">
+                                      <input type="number" class="form-control" id="floatinmonth" placeholder="0"
+                                        name="extensionDurationMonth" value="0" min="0" required />
+                                      <label for="floatinmonth">شهر</label>
+                                    </div>
+                                  </div>
+                                  <div class="col-4">
+                                    <div class="form-floating mb-3">
+                                      <input type="number" class="form-control" id="floatinday" placeholder="0"
+                                        name="extensionDurationDay" value="0" min="0" required />
+                                      <label for="floatinday">يوم</label>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <input type="submit" value="إضافة" class="btn btn-outline-primary" />
+                              </form>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="modal fade" id="Modalfr{{i.id}}" tabindex="-1" aria-labelledby="ModalLabel{{i.id}}"
+                        aria-hidden="true">
+                        <div class="modal-dialog  modal-lg">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h1 class="modal-title fs-5" id="ModalLabel{{i.id}}">إضافة تجميد</h1>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body fs-6">
+                              <form method="post" class="needs-validation" novalidate
+                                action="/app/freinsert/{{i.id}}/{{demonstrator.id}}/">
+                                {% csrf_token %}
+
+                                <div class="form-floating mb-3">
+                                  <input type="text" class="form-control" id="floatingInput" placeholder="210"
+                                    name="freezeDecisionNumber" required />
+                                  <label for="floatingInput">رقم القرار </label>
+                                </div>
+                                <div class="form-floating mb-3">
+                                  <select name="freezeDecisionType" class="form-control" id="floatingPassword" required>
+                                    <option value="">...</option>
+                                    <option value="s">ش.ع</option>
+                                    <option value="o">و</option>
+                                    <option value="b">ب</option>
+                                  </select>
+                                  <label for="floatingPassword">نوع القرار</label>
+                                </div>
+                                <div class="form-floating mb-3">
+                                  <input type="date" class="form-control" id="floatingd" placeholder="02/15/2023"
+                                    name="freezeDecisionDate" required />
+                                  <label for="floatingd">تاريخ القرار</label>
+                                </div>
+                                <div class="row">
+                                  <p class="col-12">مدة التجميد</p>
+                                  <div class="col-4">
+                                    <div class="form-floating mb-3">
+                                      <input type="number" class="form-control" id="floatinyear" placeholder="0"
+                                        name="freezeDurationYear" value="0" min="0" required />
+                                      <label for="floatinyear">سنة</label>
+                                    </div>
+                                  </div>
+                                  <div class="col-4">
+                                    <div class="form-floating mb-3">
+                                      <input type="number" class="form-control" id="floatinmonth" placeholder="0"
+                                        name="freezeDurationMonth" value="0" min="0" required />
+                                      <label for="floatinmonth">شهر</label>
+                                    </div>
+                                  </div>
+                                  <div class="col-4">
+                                    <div class="form-floating mb-3">
+                                      <input type="number" class="form-control" id="floatinday" placeholder="0"
+                                        name="freezeDurationDay" value="0" min="0" required />
+                                      <label for="floatinday">يوم</label>
+                                    </div>
+                                  </div>
+                                </div>
+                                <input type="submit" value="إضافة" class="btn btn-outline-primary" />
+                              </form>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {% endfor %} {% if not demonstrator.dispatch.all%} <p> لا يوجد إيفادات بعد </p>{% endif %}
+              </div>
+            </div>
+            <div class="row justify-content-center">
+              <a href="/app/dispatch/{{demonstrator.id}}" class="btn btn-outline-primary col-4 mb-5 mt-3">إضافة إيفاد
+                جديد</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+</section>
+<script src="{% static 'js/date-picker.min.js' %}"></script>
+<script src="{% static 'js/validator.min.js' %}"></script>
+
+<script>
+  function createElementFromHTML(htmlString) {
+    var div = document.createElement("div");
+    div.innerHTML = htmlString.trim();
+
+    // Change this to div.childNodes to support multiple top-level nodes.
+    return div.firstChild;
+  }
+
+  function edit(object, id, did, type) {
+    return new Promise((resolve, reject) => {
+      const links = {
+        efad: `/app/updateDispatch/${id}/${did}/`,
+        ex: `/app/updateExtension/${id}/${did}/`,
+        fr: `/app/updateFreeze/${id}/${did}/`,
+        unv: `/app/updateUnv/${id}/${did}/`,
+        grad: `/app/updateGrad/${id}/${did}/`,
+        demon: `/app/updateDemon/${id}/`
+      };
+
+      $.post(links[type], object)
+        .done(function (data) {
+          if (data.status === "good") {
+            Toastify({
+              text: "تم التعديل بنجاح",
+              duration: 3000,
+              close: true,
+              gravity: "top", // `top` or `bottom`
+              position: "left", // `left`, `center` or `right`
+              stopOnFocus: true, // Prevents dismissing of toast on hover
+              style: {
+                background:
+                  "linear-gradient(-45deg, #00ff9c, #00d1ff)",
+                width: "300px",
+                border: "16px"
+              }
+            }).showToast();
+          } else {
+            console.log(data);
+            Toastify({
+              text: data["message"],
+              duration: 3000,
+              close: true,
+              gravity: "top", // `top` or `bottom`
+              position: "left",// `left`, , ``center`` or 'right'
+              stopOnFocus: true,// Prevents dismissing of toast on hover
+              style: {
+                background: 'linear-gradient(45deg,#ff0084,#ff8c00)',
+                width: '300px',
+                border: '16px'
+              }
+            }).showToast();
+          }
+          console.log(data.status);
+          resolve(data.status); // Resolve the promise with data.status
+        })
+        .fail(function (error) {
+          reject(error); // Reject the promise with error
+        });
+    });
+  }
+
+  function del(type, did, id = 1) {
+    links = {
+      efad: `/app/deleteDispatch/${id}/${did}/`,
+      ex: `/app/deleteExtension/${id}/${did}/`,
+      fr: `/app/deleteFreeze/${id}/${did}/`,
+      unv: `/app/deleteUnv/${id}/${did}/`,
+      grad: `/app/deleteGrad/${id}/${did}/`,
+      demon: `/app/deleteDemon/${did}/`,
+      cert: `/app/deleteCert/${id}/${did}/`
+    };
+    ids = {
+      efad: `Efad-${id}`,
+      ex: `Extension-${id}`,
+      fr: `Freeze-${id}`,
+      cert: `cert-${id}`,
+      unv: `/app/deleteUnv/${id}/${did}/`,
+      grad: `/app/deleteGrad/${id}/${did}/`,
+    }
+    let obj = { 'csrfmiddlewaretoken': csrf.value };
+    $.post(links[type], obj, function (data) {
+      if (data.status === "good") {
+        Toastify({
+          text: "تم الحذف بنجاح",
+          duration: 3000,
+          close: true,
+          gravity: "top", // `top` or `bottom`
+          position: "left", // `left`, `center` or `right`
+          stopOnFocus: true, // Prevents dismissing of toast on hover
+          style: {
+            background: "linear-gradient(-45deg, #00ff9c, #00d1ff)",
+            width: "300px",
+            border: "16px",
+          },
+        }).showToast();
+        $(`#${ids[type]}`).remove()
+        if (type === "demon") {
+          setTimeout(function () {
+            window.location.href = "/app/allDemonstrators"
+          }, 500);
+        }
+        let ef = $("#efads")
+        if (ef.children().length === 0 && type === "efad") {
+
+          let newElement = $("<p>لا يوجد إيفادات بعد</p>")
+          ef.prepend(newElement)
+        }
+        let cer = $("#certs")
+        if (cer.children().length === 0 && type === "cert") {
+
+          let newElement = $("<p>لا يوجد شهادات تفوق </p>")
+          cer.prepend(newElement)
+        }
+      } else {
+
+        Toastify({
+          text: data["status"],
+          duration: 3000,
+          close: true,
+          gravity: "top", // `top` or `bottom`
+          position: "left", // `left`, `center` or `right`
+          stopOnFocus: true, // Prevents dismissing of toast on hover
+          style: {
+            background: "linear-gradient(45deg, #ff0084, #ff8c00);",
+            width: "300px",
+            border: "16px",
+          },
+        }).showToast();
+        setTimeout(() => {
+          location.reload()
+        }, 1500)
+      }
+    });
+  }
+
+
+
+
+  let editMode = false,
+    efadId = "",
+    btnId = "",
+    originals = {},
+    frezId = "",
+    exId = "",
+    demonId = "",
+    unvId = "",
+    gradId = "";
+  let csrf = createElementFromHTML(`{% csrf_token %}`);
+
+  $(document).keydown(function (e) {
+    if (e.keyCode === 13 && editMode && e.shiftKey) {
+      e.preventDefault();
+      $(`#${btnId}`).click();
+    }
+    if (e.keyCode === 13 && editMode) {
+      e.preventDefault()
+    }
+
+    if (e.keyCode === 27) {
+      reset();
+    }
+  });
+  function reset() {
+    $("#keyTips").addClass("d-none");
+    if (efadId) {
+      resetEfad();
+    }
+    if (frezId) {
+      resetFrez();
+    }
+    if (exId) {
+      resetEx();
+    }
+    if (demonId) {
+      resetDemon();
+    }
+    if (unvId) {
+      resetUnv();
+    }
+    if (gradId) {
+      resetGrad();
+    }
+  }
+
+  function resetChoise() {
+    let ch = Array.prototype.slice.call(document.getElementsByClassName("choises"), 0);
+    for (let i = 0; i < ch.length; i++) {
+      !ch[i].classList.add("d-none");
+    }
+  }
+</script>
+<script src="{% static 'js/editEx.js' %}"></script>
+<script src="{% static 'js/editEfad.js' %}"></script>
+<script src="{% static 'js/editFr.js' %}"></script>
+<script src="{% static 'js/editDemon.js' %}"></script>
+<script src="{% static 'js/editUnv.js' %}"></script>
+<script src="{% static 'js/editGrad.js' %}"></script>
+<script src="{% static 'js/accord.js' %}"></script>
+
+<script>
+  function formatEditableNumber(editableP) {
+    // Get the current text content of the editable <p> tag
+    let text = editableP.textContent;
+
+    // Remove all non-numeric characters from the text (except for the decimal point)
+    let newValue = text.replace(/[^0-9.]/g, '');
+
+    // Limit the decimal part to 2 digits
+    let parts = newValue.split('.');
+    if (parts.length > 1) {
+      parts[1] = parts[1].slice(0, 2);
+      newValue = parts.join('.');
+    }
+
+    // Update the text content of the <p> tag with the formatted value
+    editableP.textContent = newValue;
+  }
+</script>
+
+
+<script>
+  var acc = document.getElementsByClassName("accord");
+  var i;
+
+
+  for (i = 0; i < acc.length; i++) {
+    acc[i].addEventListener("click", function () {
+      this.classList.toggle("act");
+      var panel = this.nextElementSibling;
+      if (panel.style.maxHeight) {
+        panel.style.border = "none"
+        panel.style.maxHeight = null;
+      } else {
+        panel.style.maxHeight = "5000px";
+        // panel.style.borderColor = ""
+        panel.style.border = "1px solid #bdbbc7"
+        // panel.style.borderColor = ""
+      }
+    });
+  }
+</script>
+
+
+
+{% endblock %}

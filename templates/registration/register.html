@@ -1,0 +1,146 @@
+{% extends "base.html" %} {% block head_title %}تسجيل موظف{% endblock %}
+
+<!-- something here for nothing  -->
+
+{% load static %}
+
+{% block style %}
+<style>
+  .autocomplete-items {
+    position: absolute;
+    border: 1px solid #d4d4d4;
+    border-bottom: none;
+    border-top: none;
+    z-index: 99;
+    /*position the autocomplete items to be the same width as the container:*/
+    top: 100%;
+    left: 0;
+    right: 0;
+  }
+
+  .autocomplete-items div {
+    padding: 10px;
+    cursor: pointer;
+    background-color: #fff;
+    border-bottom: 1px solid #d4d4d4;
+  }
+
+  .autocomplete-items div:hover {
+    /*when hovering an item:*/
+    background-color: #e9e9e9;
+  }
+
+  .autocomplete-active {
+    /*when navigating through the items using the arrow keys:*/
+    background-color: DodgerBlue !important;
+    color: #ffffff;
+  }
+</style>
+<link rel="stylesheet" href="{% static 'css/multi-select.min.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<h2 class="tit">تسجيل موظف</h2>
+
+<section class="sec">
+  <div class="m-5">
+    <form class="needs-validation" novalidate autocomplete="off" method="POST">
+      {% csrf_token %}
+      <div class="row">
+        <div class="col-4">
+          <div class="form-floating mb-3">
+            <input id="floatingUsername" type="text" autocomplete="new-password" name="username" placeholder="anas"
+              required class="form-control" />
+            <label for="floatingUsername">اسم المستخدم </label>
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="form-floating mb-3">
+            <input id="floatingFirst" type="text" placeholder="anas" name="firstName" class="form-control" required />
+            <label for="floatingFirst">الاسم الأول </label>
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="form-floating mb-3">
+            <input id="floatingLast" type="text" name="lastName" placeholder="anas" class="form-control" required />
+            <label for="floatingLast">الاسم الأخير </label>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-6">
+          <div class="form-floating mb-3">
+            <input id="floatingEmail" type="email" autocomplete="new-password" name="email" placeholder="anas@anas.com"
+              class="form-control" required />
+            <label for="floatingEmail">الإيميل </label>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="form-floating mb-3">
+            <input id="floatingPassword" type="password" autocomplete="new-password" name="password"
+              placeholder="password" class="form-control" required />
+            <label for="floatingPassword">كلمة السر </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-6">
+          <div class="form-floating mb-3">
+            <input id="floatingPassword" type="password" autocomplete="new-password" name="admin_password"
+              placeholder="password" class="form-control" required />
+            <label for="floatingPassword">تأكيد كلمة سر المدير</label>
+          </div>
+        </div>
+        <div class="col-12">
+          <div class=" mb-3 autocomplete">
+            <label for="floatingP">اختر الصلاحيات:</label>
+            <select id="floatingP" name="permissions" placeholder="nothing" class="form-select" multiple required />
+
+
+            </select>
+          </div>
+
+
+        </div>
+
+      </div>
+
+      <input type="submit" class="btn btn-lg btn-primary" value="إنشاء حساب" />
+    </form>
+  </div>
+</section>
+
+
+<script src="{% static 'js/autocomplete.js'%}"></script>
+<script src="{% static 'js/multi-select.js'%}"></script>
+<script>
+  // let y = JSON.parse("{{colleges|escapejs}}")
+  // let values = []
+  // y.map(i => values.push(i.fields.permissionsCollege))
+
+  // autocomplete(document.getElementById("floatingP"), values);
+
+  $(document).ready(function () {
+    var selects = "{{colleges|escapejs}}";
+
+    selects = JSON.parse(selects)
+    let select = document.getElementById("floatingP");
+
+    console.log(typeof selects["data"])
+
+    selects["data"].forEach(o => {
+      let op = document.createElement("option")
+      op.value = o["permissionsCollege"]
+      op.text = o["permissionsCollege"]
+      select.add(op)
+    })
+
+    new MultiSelectTag('floatingP')
+
+  });
+
+
+</script>
+{% endblock %}

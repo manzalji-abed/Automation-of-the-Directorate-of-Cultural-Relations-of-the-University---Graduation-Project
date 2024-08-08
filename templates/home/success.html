@@ -1,0 +1,62 @@
+{% extends "base.html" %} {% block head_title %}تم الإرسال{% endblock %}
+
+<!-- something here for nothing  -->
+{% load static %}
+
+{% block style %}
+<style>
+    .success-inner {
+        display: inline-block;
+    }
+
+    .success-inner h1 {
+        font-size: 120px;
+        text-shadow: 3px 5px 2px #3333;
+        color: #006DFE;
+        font-weight: 700;
+        margin-bottom: 20px;
+    }
+
+    .success-inner h1 span {
+        display: block;
+        font-size: 25px;
+        color: #333;
+        font-weight: 600;
+        text-shadow: none;
+        margin-top: 20px;
+    }
+
+    .success-inner p {
+        font-size: 1.2rem;
+        padding: 5px 15px;
+    }
+
+    .success-inner .btn {
+        color: #fff;
+    }
+</style>
+{% endblock %}
+<!-- something here for nothing  -->
+
+{% block content %}
+
+<div class="text-center h-100 sec pt-5">
+
+    <div class="row">
+        <div class="col-lg-6 offset-lg-3 col-12">
+            <!-- Error Inner -->
+            <div class="success-inner">
+                <h1><i class="fa fa-envelope"></i><span>تم إرسال الإيميلات بنجاح</span></h1>
+                {% for i in emails %}
+                <p>{{i}}</p>
+                {% endfor %}
+                <a href="/app/" class="btn btn-primary btn-lg mt-5">عد للصفحة الرئيسية </a>
+            </div>
+            <!--/ End Error Inner -->
+        </div>
+    </div>
+
+</div>
+
+
+{% endblock %}

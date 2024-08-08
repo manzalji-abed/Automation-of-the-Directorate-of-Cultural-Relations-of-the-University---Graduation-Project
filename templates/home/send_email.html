@@ -1,0 +1,215 @@
+{% extends "base.html" %} {% block head_title %} إرسال إيميل{% endblock %}
+{% load static %}
+<!-- something here for nothing  -->
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/multi-select.min.css' %}">
+<style>
+  .alternating-colors {
+    list-style-position: outside;
+    padding-right: 50px;
+    margin-top: 10px;
+  }
+
+  .alternating-colors>li {
+    color: #4f4f4f;
+    padding-right: 16px;
+    margin-top: 24px;
+    position: relative;
+    font-size: 16px;
+    line-height: 20px;
+  }
+
+  .alternating-colors>li:before {
+
+    content: '';
+    display: block;
+    height: 42px;
+    width: 42px;
+    border-radius: 50%;
+    border: 2px solid #ddd;
+    position: absolute;
+    top: -12px;
+    right: -39px;
+  }
+
+  .alternating-colors>li>div {
+    position: relative;
+    top: -37px;
+  }
+
+
+
+  strong {
+    color: #292929;
+  }
+
+  ol.alternating-colors li:nth-child(odd):before {
+    border-color: #0bad02;
+  }
+
+  ol.alternating-colors li:nth-child(even):before {
+    border-color: #2378d5;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<h2 class="tit">إرسال ايميل</h2>
+
+
+<div class="sec ">
+  <form class="col-md-8  mx-auto mt-5" action="../sendEmails/" method="POST">
+    {% csrf_token %}
+    <div class="mb-3">
+      <div>
+        <label for="exampleFormControlSelect" class="form-label">اختر الموقع الذي تريد الإرسال منه :</label>
+        <select name="server" class="form-select" id="exampleFormControlSelect"
+          aria-label="Floating label select example">
+          <option selected value="gmail">Gmail</option>
+          <option value="hotmail">Hotmail</option>
+          <option value="albaath">Albaath</option>
+        </select>
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="exampleFormControlInput1" class="form-label">ايميل المستلم :</label>
+      <input type="email" class="form-control" name="email" id="exampleFormControlInput1"
+        placeholder="name@example.com">
+    </div>
+    <div class=" mb-3">
+      <label class="visually-hidden" for="autoSizingInputGroup">Username</label>
+      <div class="input-group">
+        <div style="background-color:#4b49ac; text-align: left;" class="input-group-text text-white">
+          albaath-univ.edu.sy@</div>
+        <input name="user" type="text" class="form-control" id="autoSizingInputGroup" placeholder="Username"
+          style="direction: ltr;">
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="exampleFormControlInput1" class="form-label">الموضوع :</label>
+      <input type="text" class="form-control d-flex" name="subject" id="exampleFormControlInput1"
+        placeholder="موضوع الرسالة :">
+    </div>
+    <div class="mb-3">
+      <label for="exampleFormControlTextarea1" class="form-label">الرسالة :</label>
+      <textarea class="form-control" name="msg" id="exampleFormControlTextarea1" rows="4"
+        placeholder="اكتب الرسالة هنا..."></textarea>
+    </div>
+    <div class="mb-3">
+      <label class="text-dark" for="floatingSelect">اختر الكلية :</label>
+
+      <select name="college" class="form-select" id="floatingSelect" aria-label="Floating label select example">
+        <option selected>افتح القائمة لتختار الكلية المرسل إليها :</option>
+      </select>
+
+    </div>
+    {% csrf_token %}
+    <button type="submit" name="emails" value="normal" style="background-color:#4b49ac"
+      class="btn text-white  ">ارسال</button>
+
+    <button type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample"
+      style="background-color:#4b49ac" class="btn text-white  ">أسماء المتأخرين</button>
+
+    <button id="notification" name="emails" value="late" style="background-color:#4b49ac" class="btn text-white  ">ارسال
+      انذار للمتأخرين</button>
+
+    <button type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample2"
+      aria-controls="offcanvasExample2" style="background-color:#4b49ac" class="btn text-white  ">التمديدات غير
+      المرسلة</button>
+    <button id="notification" name="emails" value="unsent" style="background-color:#4b49ac"
+      class="btn text-white  ">ارسال التمديدات غير المرسلة</button>
+  </form>
+  <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title" id="offcanvasExampleLabel">أسماء المتأخرين</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+
+    <div class="offcanvas-body">
+      <ol class="alternating-colors">
+        {% for lat in late %}
+
+        <li>
+          <div>
+            <p><strong>{{lat.name}}</strong></p>
+            <p>{{lat.email}}</p>
+            <p>{{lat.mobile}}</p>
+          </div>
+        </li>
+        {% endfor %}
+      </ol>
+    </div>
+  </div>
+  <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasExample2" aria-labelledby="offcanvasExampleLabel2">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title" id="offcanvasExampleLabel">التمديدات غير المرسلة</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+
+    <div class="offcanvas-body">
+      <ol class="alternating-colors">
+        {% for lat in unsent %}
+
+        <li>
+          <div>
+            <p><strong>{{lat.name}}</strong></p>
+            <p>{{lat.email}}</p>
+            <p>{{lat.mobile}}</p>
+            <p> تاريخ {{lat.extensionDecisionDate}}</p>
+          </div>
+        </li>
+        {% endfor %}
+      </ol>
+    </div>
+  </div>
+</div>
+
+<script src="{% static 'js/multi-select.js'%}"></script>
+
+
+<script>
+  function createElementFromHTML(htmlString) {
+    var div = document.createElement("div");
+    div.innerHTML = htmlString.trim();
+
+    // Change this to div.childNodes to support multiple top-level nodes.
+    return div.firstChild;
+  }
+  let csrf = createElementFromHTML(`{% csrf_token %}`);
+  let values = {}
+  values['csrfmiddlewaretoken'] = csrf.value;
+
+  let handleSubmit = (e) => {
+    e.preventDefault()
+    $.post("/app/sendToLate/", values, (data) => {
+      console.log(data)
+    })
+
+  }
+  $(document).ready(function () {
+    var selects = "{{select|escapejs}}";
+
+    selects = JSON.parse(selects)
+    let select = document.getElementById("floatingSelect");
+
+    console.log(typeof selects["data"])
+
+    selects["data"].forEach(o => {
+      let op = document.createElement("option")
+      op.value = o["permissionsCollege"]
+      op.text = o["permissionsCollege"]
+      select.add(op)
+    })
+
+    var last = document.createElement("option");
+    last.text = "كل الكليات";
+    last.value = "all";
+    select.add(last);
+
+    // new MultiSelectTag('floatingSelect')
+
+  });
+
+</script>
+{% endblock %}

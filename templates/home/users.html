@@ -1,0 +1,263 @@
+{% extends "base.html" %}
+{% block head_title %}قائمة الموظفين{% endblock %}
+
+{% block content %}
+{% load static %}
+<h2 class="tit">لائحة الموظفين</h2>
+<div class="">
+    <div class="row justify-content-center">
+
+        <div class="col-12 col-lg-9">
+
+            <input type="text" class="form-control my-5" id="myInput" onkeyup="myFunction()"
+                placeholder="البحث عن موظف...">
+
+            <table class="table table-striped" id="myTable">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">اسم المستخدم</th>
+                        <th scope="col">الاسم الأول</th>
+                        <th scope="col">الاسم الأخير</th>
+                        <th scope="col">الإيميل</th>
+                        <th>أدمن</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in result %}
+
+                    <tr>
+
+                        <th scope="row">{{ forloop.counter }}</th>
+                        <td style="color: #166EFD"> {{ user.username }} </td>
+
+                        <td>{{ user.first_name }}</td>
+                        <td>{{ user.last_name }}</td>
+                        <td>{{user.email}}</td>
+                        <td>
+                            {% if user.is_superuser %}
+                            <span class="badge  bg-success">نعم</span>
+                            {% else %}
+                            <span class="badge bg-danger">لا</span>
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            <div class="btn-group">
+
+                                <button type="button" class="btn btn-sm  btn-outline-success dropdown-toggle"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fa-sharp fa-solid fa-user"></i>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                            data-bs-target="#editModal{{ user.id }}">تعديل</a></li>
+                                    <li><a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                            data-bs-target="#resetModal{{ user.id }}">إعادة تعيين كلمة المرور</a></li>
+                                    {% if user.is_superuser %}
+
+                                    {% else %}
+                                    <li><a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                            data-bs-target="#changeModalLabel{{ user.id }}">جعل
+                                            المستخدم مدير نظام</a></li>
+                                    {% endif %}
+                                    <li><a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                            data-bs-target="#deleteModalLabel{{ user.id }}">حذف</a></li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+
+
+                    {% endfor %}
+                </tbody>
+            </table>
+            <a href="/app/register" class="btn btn-outline-primary">إضافة مستخدم</a>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Modal -->
+{% for user in result %}
+<div class="modal fade" id="editModal{{ user.id }}" tabindex="-1" aria-labelledby="editModalLabel{{ user.id }}"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel{{ user.id }}">تعديل المستخدم</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/app/users/update/{{user.id}}" id="update{{user.id}}" method="POST">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="username{{ user.id }}" class="form-label">اسم المستخدم</label>
+                        <input type="text" class="form-control" id="username{{ user.id }}" name="username"
+                            value="{{ user.username }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="first_name{{ user.id }}" class="form-label">الاسم الأول</label>
+                        <input type="text" class="form-control" id="first_name{{ user.id }}" name="first_name"
+                            value="{{ user.first_name }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="last_name{{ user.id }}" class="form-label">الاسم الأخير</label>
+                        <input type="text" class="form-control" id="last_name{{ user.id }}" name="last_name"
+                            value="{{ user.last_name }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="email{{ user.id }}" class="form-label">الإيميل</label>
+                        <input type="email" class="form-control" id="email{{ user.id }}" name="email"
+                            value="{{ user.email }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="ad{{ user.id }}" class="form-label">تأكيد كلمة سر الأدمن</label>
+                        <input type="password" class="form-control" id="ad{{ user.id }}" name="admin_password">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إغلاق</button>
+                <button type="submit" class="btn btn-primary" form="update{{user.id}}">حفظ</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+<!-- Reset Password Modal -->
+{% for user in result %}
+<div class="modal fade" id="resetModal{{ user.id }}" tabindex="-1" aria-labelledby="resetModalLabel{{ user.id }}"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="resetModalLabel{{ user.id }}">تغيير كلمة المرور ل {{user.username}}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form class="needs-validation" novalidate action="/app/users/changePassword/{{user.id}}" method="POST"
+                    id="reset{{user.id}}">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="new_password{{ user.id }}" class="form-label">كلمة المرور الجديدة</label>
+                        <input type="password" class="form-control" id="new_password{{ user.id }}"
+                            oninput="pat(event,'{{user.id}}')" required name="newPassword">
+                    </div>
+                    <div class="mb-3">
+                        <label for="confirm_password{{ user.id }}" class="form-label">تأكيد كلمة المرور</label>
+                        <input type="password" class="form-control" required id="confirm_password{{ user.id }}"
+                            name="confirm_password">
+                        <div class="invalid-feedback">كلمة المرور غير متطابقة</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="addEventListener{{ user.id }}" class="form-label">تأكيد كلمة سر الأدمن</label>
+                        <input type="password" class="form-control" id="add{{ user.id }}" name="admin_password">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إغلاق</button>
+                <button type="submit" class="btn btn-primary" form="reset{{user.id}}"
+                    onclick="validate(event,'{{user.id}}')">تغيير كلمة المرور</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+<!-- delete modal -->
+{% for user in result %}
+<div class="modal fade" id="deleteModalLabel{{ user.id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ user.id }}"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel{{ user.id }}">حذف المستخدم</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/app/users/delete/{{user.id}}" id="delete{{user.id}}" method="POST">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label for="adb{{ user.id }}" class="form-label">تأكيد كلمة سر الأدمن</label>
+                        <input type="password" class="form-control" id="adb{{ user.id }}" name="admin_password">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إغلاق</button>
+                <button type="submit" class="btn btn-primary" form="delete{{user.id}}">حذف</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% for user in result %}
+<div class="modal fade" id="changeModalLabel{{ user.id }}" tabindex="-1" aria-labelledby="changeModalLabel{{ user.id }}"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="changeModalLabel{{ user.id }}">ترقية المستخدم</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/app/users/makeUserAdmin/{{user.id}}" id="change{{user.id}}" method="POST">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label for="adc{{ user.id }}" class="form-label">تأكيد كلمة سر الأدمن</label>
+                        <input type="password" class="form-control" id="adc{{ user.id }}" name="admin_password">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إغلاق</button>
+                <button type="submit" class="btn btn-primary" form="change{{user.id}}">تأكيد</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+
+<script>
+    pat = (event, id) => {
+
+        let str = event.target.value
+        const regex = new RegExp(`^${str}$`);
+        con = document.getElementById(`confirm_password${id}`)
+        con.setAttribute('pattern', str);
+    }
+
+</script>
+
+
+<script>
+    function myFunction() {
+        // Declare variables
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+
+        console.log(tr[1].getElementsByTagName('td')[0].value);
+        // Loop through all table rows, and hide those who don't match the search query
+        for (i = 1; i < tr.length; i++) {
+
+            td = tr[i].getElementsByTagName("td")[0];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+</script>
+{% endblock %}
